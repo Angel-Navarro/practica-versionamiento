@@ -1,0 +1,101 @@
+﻿@{
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/Acceso.css">
+}
+@model Usuario
+<body>
+
+    <div class="container-fluid FondoLogin align-content-center">
+        <div class="container d-flex justify-content-center align-items-center vh-100">
+            <form asp-controller = "Acceso" asp-action = "Index" method="post" class="form">
+                <p class="form-title">Inicio de sesión</p>
+                <div class="input-container">
+                    <input type="email" placeholder="Ingresa tu correo electrónico..." asp-for="correo">
+                    <span>
+                    </span>
+                </div>
+                <div class="input-container">
+                    <input type="password" placeholder="Ingresa tu contraseña..." asp-for="clave">
+                </div>
+                <button  type="submit" class="submit">
+                    Ingresar
+                </button>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- Footer -->
+    <footer class="text-center text-lg-start text-white" style="background-color: #ffffff">
+        <!-- Grid container -->
+        <div class="container-fluid">
+
+            <!-- Section descripción -->
+            <section class=" pt-0">
+                <div class="row d-flex align-items-center">
+
+                    <div class="col-md-7 col-lg-8 text-center text-md-start">
+                        <div class="p-3 text-dark">
+                            © 2025 The Avenue:
+                            <a class="text-dark" href="#">Carretera Villa Hidalgo/Ags. Presa Juiquinaqui </a>
+                        </div>
+                    </div>
+
+                    <div class="col-md-5 col-lg-4 ml-lg-0 text-center text-md-end">
+
+                        <!-- IG -->
+                        <a class="btn btn-outline-light btn-floating m-1 icono-Footer" class="text-white" role="button">
+                            <i class="fa-brands fa-instagram fa-2xl" style="color: #000000;"></i>
+                        </a>
+
+                        <!-- Face -->
+                        <a class="btn btn-outline-light btn-floating m-1" class="text-white" role="button">
+                            <i class="fa-brands fa-facebook fa-2xl" style="color: #000000;"></i>
+                        </a>
+
+                        <!-- Wh -->
+                        <a class="btn btn-outline-light btn-floating m-1" class="text-white" role="button">
+                            <i class="fa-brands fa-whatsapp fa-2xl" style="color: #000000;"></i>
+                        </a>
+
+
+                    </div>
+
+                </div>
+            </section>
+
+        </div>
+    </footer>
+
+
+    @section Scripts {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                var mostrarModal = '@ViewBag.MostrarModal';
+                if (mostrarModal === 'True') {
+                    var modal = new bootstrap.Modal(document.getElementById('modalError'));
+                    modal.show();
+                }
+            });
+        </script>
+    }
+
+</body>
+
+<!-- Modal -->
+<div class="modal fade" id="modalError" tabindex="-1" aria-labelledby="modalErrorLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="modalErrorLabel">Error de inicio de sesión</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                Usuario o clave incorrectos. Por favor, intenta de nuevo.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>

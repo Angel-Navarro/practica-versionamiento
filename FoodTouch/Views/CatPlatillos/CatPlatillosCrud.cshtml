@@ -1,0 +1,254 @@
+﻿@{
+    <!-- Referencias -->
+    <link rel="stylesheet" href="../css/Acceso.css">
+    <script src="~/js/Cat_Platillos.js"></script>
+    @model List<Cat_Platillos>
+}
+
+<body>
+    <div class="container my-4 text-center">
+        <h1 class="display-4 fs-2 font-weight-bold">Registro de platillos de la Categoría: @ViewBag.nombre</h1>
+        <input type="text" id="p_id_CatPlati" value="@ViewBag.id" hidden/>
+    </div>
+
+    <div class="container">
+        <div class="row my-5">
+            <div class="col-sm-3">
+                <input type="number" placeholder="Clave" class="form-control" name="clave" />
+            </div>
+            <div class="col-sm-3">
+                <a href=""><i class="fa-solid fa-magnifying-glass fa-bounce fa-xl" style="color: #005eff;"></i></a>
+            </div>
+            <div class="col-sm-3"></div>
+            <div class="col-sm-3">
+                <a class="btn btn-primary col-sm-12" data-bs-toggle="modal" data-bs-target="#ModalAgregarPlatillo">Agregar</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container my-4 text-center fs-6">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <td>Nombre</td>
+                    <td>Descripción</td>
+                    <td>Precio (Tamaño grande)</td>
+                    <td>Precio (Tamaño Chico)</td>
+                    <td>Imagen</td>
+                    <td>Editar</td>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var platillo in Model)
+                {
+                    <tr>
+                        <td>@platillo.nombre</td>
+                        <td>@platillo.descripcion</td>
+                        <td>@platillo.precioG</td>
+                        <td>@platillo.precioCH</td>
+                        <td>
+                            <!-- Aquí puedes poner un tag <img> si decides mostrar una imagen -->
+                            @* <img src="@platillo.imagen" alt="Imagen" width="50" /> *@
+                            N/A <!-- Si no hay imagen -->
+                        </td>
+                        <td>
+                            <form asp-action="EditarPlatillo" method="post">
+                                <input type="hidden" name="id" value="@platillo.ID" />
+                                <button type="submit" name="editar" class="border-0" style="background-color: #00FF0000;">
+                                    <i class="fa-solid fa-pencil fa-bounce" style="color: #11ff00;"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+
+            </tbody>
+        </table>
+    </div>
+</body>
+
+
+<!-- ModalAgregarPlatillo -->
+<div class="modal fade" id="ModalAgregarPlatillo" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <!-- Encabezado del modal -->
+            <div class="modal-header">
+                <h5 class="modal-title" id="miModalLabel">Agregar</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+
+            <!-- Cuerpo del modal -->
+            <div class="modal-body">
+
+                <div class="row mt-3">
+                    <div class="col-sm-12">
+                        <label for="exampleFormControlInput1">Nombre</label>
+                        <input id="txt_Nombre_CatPlati" type="text" class="form-control" placeholder="Nombre...">
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-sm-12">
+                        <label for="exampleFormControlInput1">Descripción</label>
+                        <textarea id="txt_Descr_CatPlati" rows="3" class="form-control" placeholder="Descripción..."></textarea>
+
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-sm-6">
+                        <label for="exampleFormControlInput1">Precio Gnde</label>
+                        <input id="txt_PrecioG_CatPlati" type="text" class="form-control" placeholder="Precio...">
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="exampleFormControlInput1">Precio Chco</label>
+                        <input id="txt_PrecioCH_CatPlati" type="text" class="form-control" placeholder="Precio...">
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-sm-6">
+                        <label for="exampleFormControlInput1">Imagen</label>
+                        <input id="txt_Imagen_CatPlati" type="file" class="form-control" placeholder="Imagen...">
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="exampleFormControlInput1">Estatus</label>
+                        <select id="cmb_Estatus_CatPlati" class="form-control">
+                            <option value="ACTIVO">ACTIVO</option>
+                            <option value="INACTIVO">INACTIVO</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pie del modal -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button onclick="AgregarPlatillo()" type="button" class="btn btn-primary">Guardar</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- ModalModificarPlatillo -->
+<div class="modal fade" id="ModalModificarPlatillo" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <!-- Encabezado del modal -->
+            <div class="modal-header">
+                <h5 class="modal-title" id="miModalLabel">Modificar</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+
+            <!-- Cuerpo del modal -->
+            <div class="modal-body">
+
+                <div class="row mt-3">
+                    <div class="col-sm-12">
+                        <label for="exampleFormControlInput1">Nombre</label>
+                        <input id="txt_ModiNombre_CatPlati" type="text" class="form-control" placeholder="Nombre...">
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-sm-12">
+                        <label for="exampleFormControlInput1">Descripción</label>
+                        <textarea id="txt_ModiDescr_CatPlati" rows="3" class="form-control" placeholder="Descripción..."></textarea>
+
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-sm-6">
+                        <label for="exampleFormControlInput1">Precio Gnde</label>
+                        <input id="txt_ModiPrecioG_CatPlati" type="text" class="form-control" placeholder="Precio...">
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="exampleFormControlInput1">Precio Chco</label>
+                        <input id="txt_ModiPrecioCH_CatPlati" type="text" class="form-control" placeholder="Precio...">
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-sm-6">
+                        <label for="exampleFormControlInput1">Imagen</label>
+                        <input id="txt_ModiImagen_CatPlati" type="file" class="form-control" placeholder="Imagen...">
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="exampleFormControlInput1">Estatus</label>
+                        <select id="cmb_ModiEstatus_CatPlati" class="form-control">
+                            <option value="ACTIVO">ACTIVO</option>
+                            <option value="INACTIVO">INACTIVO</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pie del modal -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button id="btn_Modificar_CatPlati" type="button" class="btn btn-primary">Guardar</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!--Modal alerta-->
+<div class="modal fade" id="ModalAlerta_CatPlatillo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12 text-center">
+                        <i class="fa-solid fa-triangle-exclamation fa-bounce fa-2xl" style="color: #ff0000;"></i>
+                        <br />
+                        <label id="lbl_Alerta_CatPlatillo"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary rounded-button" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal info-->
+<div class="modal fade" id="ModalInfo_CatPlatillo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12 text-center">
+                        <i class="fa-solid fa-circle-info fa-bounce fa-2xl" style="color: #005eff;"></i>
+                        <br />
+                        <label id="lbl_Info_CatPlatillo"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary rounded-button" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
