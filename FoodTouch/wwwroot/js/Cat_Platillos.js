@@ -25,7 +25,7 @@
     formData.append("idCategoria", idCategoria);
     formData.append("estatus", estatus);
 
-    axios.post(urlServer + '/CatPlatillos/AgregarPlatillo', formData)
+    axios.post(urlServer + 'CatPlatillos/AgregarPlatillo', formData)
         .then(respuesta => {
             console.log(respuesta.data);
             if (respuesta.data == 'OK') {
