@@ -4,14 +4,15 @@ namespace FoodTouch.Models
 {
     public class Cat_Platillos
     {
-        public string ID { get; set; }
+        public int ID { get; set; }
         public string nombre { get; set; }
         public string descripcion { get; set; }
         public string precioG { get; set; }
         public string precioCH { get; set; }
-        public string imagen { get; set; }
+        public byte[] imagen { get; set; }
         public string idCategoria { get; set; }
         public string estatus { get; set; }
+        public string imagenBase64 { get; set; }
 
         #region Select
 
@@ -69,7 +70,7 @@ namespace FoodTouch.Models
                 }
 
                 //Obtener 
-                string query = string.Format(@"SELECT ID,nombre,descripcion,precioG,precioCH,idCategoria,estatus FROM TBL_CAT_PLATILLOS {0}", parteQuery);
+                string query = string.Format(@"SELECT ID,nombre,descripcion,precioG,precioCH,idCategoria,estatus,imagen FROM TBL_CAT_PLATILLOS {0}", parteQuery);
                 conn.Open();
                 SqlCommand cmd = new SqlCommand(query, conn);
                 SqlDataReader dr = cmd.ExecuteReader();
@@ -80,14 +81,25 @@ namespace FoodTouch.Models
                     while (dr.Read())
                     {
                         Cat_Platillos plato = new Cat_Platillos();
-                        plato.ID = dr[0].ToString();
+                        plato.ID = int.Parse(dr[0].ToString());
                         plato.nombre = dr[1].ToString();
                         plato.descripcion = dr[2].ToString();
                         plato.precioG = dr[3].ToString();
                         plato.precioCH = dr[4].ToString();
-                        //plato.imagen = dr[6].ToString();
                         plato.idCategoria = dr[5].ToString();
                         plato.estatus = dr[6].ToString();
+
+
+                        byte[] imagenBytes = dr[7] as byte[];
+                        plato.imagen = imagenBytes;
+
+                        //Convertir la imagen Bytes en base64
+                        if (imagenBytes != null && imagenBytes.Length > 0)
+                        {
+                            string mime = "image/jpeg";
+                            plato.imagenBase64 = $"data:{mime};base64,{Convert.ToBase64String(imagenBytes)}";
+                        }
+
                         platillos.Add(plato);  //Para ir agregando a la lista.
                     }
                     dr.Close();
@@ -141,7 +153,7 @@ namespace FoodTouch.Models
                     while (dr.Read())
                     {
                         Cat_Platillos plato = new Cat_Platillos();
-                        plato.ID = dr[0].ToString();
+                        plato.ID = int.Parse(dr[0].ToString());
                         plato.nombre = dr[1].ToString();
                         plato.descripcion = dr[3].ToString();
                         plato.precioG = dr[4].ToString();
@@ -174,18 +186,21 @@ namespace FoodTouch.Models
 
         }
 
-
         #endregion
 
         #region Insert
         public static string AgregarPlatillo(Cat_Platillos platillo)
         {
+            platillo.ID = ObtenerUltimoIdMasUno();
 
             SqlConnection conn = new SqlConnection(Globales.GlobalVariables.conexion_db);
             try
             {
-                string query = string.Format(@"insert into TBL_CAT_PLATILLOS(ID,nombre,descripcion,precioG,precioCH,idCategoria,estatus) value('{0}','{1}','{2}','{3}','{4}','{5}','ACTIVO')",
-                platillo.ID, platillo.nombre, platillo.descripcion, platillo.precioG, platillo.precioCH, platillo.idCategoria);
+                // Convertir imagen a hexadecimal
+                string hexImagen = ByteArrayToHexString(platillo.imagen);
+
+                string query = string.Format(@"insert into TBL_CAT_PLATILLOS(ID,nombre,descripcion,precioG,precioCH,idCategoria,estatus,imagen) values('{0}','{1}','{2}','{3}','{4}','{5}','{6}',{7})",
+                platillo.ID, platillo.nombre, platillo.descripcion, platillo.precioG, platillo.precioCH, platillo.idCategoria, platillo.estatus, hexImagen);
                 conn.Open();
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.ExecuteNonQuery();
@@ -203,20 +218,24 @@ namespace FoodTouch.Models
         #endregion
 
         #region Update
-        public static bool ModificarPlatillo(Cat_Platillos platillo)
+        public static string ModificarPlatillo(Cat_Platillos platillo)
         {
 
             SqlConnection conn = new SqlConnection(Globales.GlobalVariables.conexion_db);
             try
             {
+                //Convertir a hex antes de insertar
+                string hexImagen = ByteArrayToHexString(platillo.imagen);
+
                 string query = string.Format(@"UPDATE TBL_CAT_PLATILLOS
                 SET nombre = '{1}',
                     descripcion = '{2}',
                     precioG = '{3}',
                     precioCH = '{4}',
-                    estatus = '{5}'
+                    estatus = '{5}',
+                    imagen = {6}
                 WHERE ID = '{0}'",
-                platillo.ID, platillo.nombre, platillo.descripcion, platillo.precioG, platillo.precioCH, platillo.estatus);
+                platillo.ID, platillo.nombre, platillo.descripcion, platillo.precioG, platillo.precioCH, platillo.estatus, hexImagen);
 
                 conn.Open();
                 SqlCommand cmd = new SqlCommand(query, conn);
@@ -224,15 +243,28 @@ namespace FoodTouch.Models
                 conn.Close();
                 conn.Dispose();
                 cmd.Dispose();
-                return true;
+                return "OK";
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
-                return false;
+                return "ERROR ";
             }
         }
         #endregion
+
+        #region Extras
+
+        public static string ByteArrayToHexString(byte[] bytes)
+        {
+            if (bytes == null || bytes.Length == 0)
+                return "NULL"; // si no hay imagen
+
+            return "0x" + BitConverter.ToString(bytes).Replace("-", "");
+        }
+
+        #endregion
+
 
     }
 }

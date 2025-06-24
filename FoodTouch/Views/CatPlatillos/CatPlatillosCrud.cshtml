@@ -38,7 +38,7 @@
                     <td>Editar</td>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="tbody_CatPlati">
 
                 @foreach (var platillo in Model)
                 {
@@ -48,17 +48,16 @@
                         <td>@platillo.precioG</td>
                         <td>@platillo.precioCH</td>
                         <td>
-                            <!-- Aquí puedes poner un tag <img> si decides mostrar una imagen -->
-                            @* <img src="@platillo.imagen" alt="Imagen" width="50" /> *@
-                            N/A <!-- Si no hay imagen -->
+                            <button type="button" class="border-0" style="background-color: #00FF0000;"
+                                    onclick="MostrarImagen('@platillo.imagenBase64')">
+                                <i class="fa-solid fa-image fa-bounce" style="color: #1655c0;"></i>
+                            </button>
                         </td>
                         <td>
-                            <form asp-action="EditarPlatillo" method="post">
-                                <input type="hidden" name="id" value="@platillo.ID" />
-                                <button type="submit" name="editar" class="border-0" style="background-color: #00FF0000;">
-                                    <i class="fa-solid fa-pencil fa-bounce" style="color: #11ff00;"></i>
-                                </button>
-                            </form>
+                            <button type="button" class="border-0" style="background-color: #00FF0000;"
+                                    onclick="MostrarModalModificar('@platillo.ID|@platillo.nombre|@platillo.descripcion|@platillo.precioG|@platillo.precioCH|@platillo.estatus|@platillo.imagenBase64')">
+                                <i class="fa-solid fa-pencil fa-bounce" style="color: #11ff00;"></i>
+                            </button>
                         </td>
                     </tr>
                 }
@@ -157,8 +156,10 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
 
-            <!-- Cuerpo del modal -->
             <div class="modal-body">
+
+            <!--Input para id-->
+                <input type="text" id="txt_ModiId_CatPlati" value="@ViewBag.id" hidden />
 
                 <div class="row mt-3">
                     <div class="col-sm-12">
@@ -186,7 +187,8 @@
                 <div class="row mt-3">
                     <div class="col-sm-6">
                         <label for="exampleFormControlInput1">Imagen</label>
-                        <input id="txt_ModiImagen_CatPlati" type="file" class="form-control" placeholder="Imagen...">
+                        <input id="txt_ModiImagen_CatPlati" type="file" class="form-control" placeholder="Imagen..." onchange="ActualizarImagen()">
+                        <img id="img_ModiVistaPrevia" src="" class="img-thumbnail mt-2" style="max-height: 200px;" alt="Vista previa imagen actual" />
                     </div>
                     <div class="col-sm-6">
                         <label for="exampleFormControlInput1">Estatus</label>
@@ -201,12 +203,28 @@
             <!-- Pie del modal -->
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button id="btn_Modificar_CatPlati" type="button" class="btn btn-primary">Guardar</button>
+                <button id="btn_Modificar_CatPlati" type="button" class="btn btn-primary" onclick="ModificarPlatillo()">Guardar</button>
             </div>
 
         </div>
     </div>
 </div>
+
+<!-- Modal para mostrar imagen -->
+<div class="modal fade" id="ModalImagenPlatillo" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Imagen del Platillo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="img_ModalPlatillo" class="img-fluid rounded shadow" alt="Imagen del platillo" style="max-height: 400px;" />
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <!--Modal alerta-->
 <div class="modal fade" id="ModalAlerta_CatPlatillo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

@@ -101,18 +101,65 @@ namespace FoodTouch.Controllers
             }
         }
 
+        #region Metodos de la clase
+
         [HttpPost]
-        public string AgregarPlatillo(string nombre, string descricpion, string precioG, string precioCH, string idCategoria, string estatus)
+        public string AgregarPlatillo(string nombre, string descripcion, string precioG, string precioCH, string idCategoria, string estatus, IFormFile imagen)
         {
+
+            byte[] imagenBytes = null;
+
+            if (imagen != null && imagen.Length > 0)
+            {
+                using (var ms = new MemoryStream())
+                {
+                    imagen.CopyTo(ms);
+                    imagenBytes = ms.ToArray(); // convertimos la imagen a arreglo de bytes
+                }
+            }
+
+
             Cat_Platillos platillo = new Cat_Platillos();
             platillo.nombre = nombre;
-            platillo.descripcion = descricpion;
+            platillo.descripcion = descripcion;
             platillo.precioG = precioG;
             platillo.precioCH = precioCH;
             platillo.idCategoria = idCategoria;
             platillo.estatus = estatus;
-            // Llama al m�todo EnviarCorreo desde la instancia creada
+            platillo.imagen = imagenBytes;
+
+
+            // Llama al metodo EnviarCorreo desde la instancia creada
             return Cat_Platillos.AgregarPlatillo(platillo);
         }
+        [HttpPost]
+        public string ModificarPlatillo(string nombre, string descripcion, string precioG, string precioCH, string id, string estatus, string imagenBase64)
+        {
+            Cat_Platillos platillo = new Cat_Platillos();
+            platillo.ID = int.Parse(id);
+            platillo.nombre = nombre;
+            platillo.descripcion = descripcion;
+            platillo.precioG = precioG;
+            platillo.precioCH = precioCH;
+            platillo.estatus = estatus;
+            platillo.imagenBase64 = imagenBase64;
+
+            // Quitar "data:image/jpeg;base64," y convertir a byte[]
+            if (!string.IsNullOrEmpty(imagenBase64) && imagenBase64.StartsWith("data"))
+            {
+                string base64Data = imagenBase64.Substring(imagenBase64.IndexOf(",") + 1);
+                platillo.imagen = Convert.FromBase64String(base64Data);
+            }
+
+
+            return Cat_Platillos.ModificarPlatillo(platillo);
+        }
+        [HttpPost]
+        public List<Cat_Platillos> ObtenerPlatillos(string idCategoria)
+        {
+            return Cat_Platillos.ObtenerPlatillos(idCategoria);
+        }
+
+        #endregion
     }
 }
