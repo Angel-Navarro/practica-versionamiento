@@ -22,9 +22,11 @@
     </script>
 
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+
+        <!--Barra de navegacion-->
+        <nav class="navbar fixed-top navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">FoodTouch</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -34,25 +36,26 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Menú</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Ventas">Ventas</a>
-                        </li>
-
                         @if(User.IsInRole("Administrador") || User.IsInRole("Supervisor"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Compras">Configuracion de platillos</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="CatPlatillos" asp-action="Index">Configuracion de platillos</a>
+                            </li>
+                        }
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Acceso" asp-action="Salir"><i class="fa-solid fa-right-to-bracket"></i></a>
+                            </li>
+                        }
+                        else{
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Acceso" asp-action="Index"><i class="fa-solid fa-user"></i></a>
                             </li>
                         }
 
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Clientes">Menu</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Acceso" asp-action="Salir">Salir</a>
-                        </li>
 @*                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li> *@
@@ -61,19 +64,38 @@
             </div>
         </nav>
     </header>
-    <div class="container">
+
+@*     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
-    </div>
+    </div> *@
 
-    <footer class="border-top footer text-muted">
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="flex-fill">
+        <div class="container pt-3">
+            @RenderBody()
+        </div>
+    </main>
+
+
+@*     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2025 - FoodTouch - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
             <small>Versión de la aplicación: @ViewBag.AppVersion</small>
         </div>
 
+    </footer> *@
+
+    <!-- FOOTER QUE SIEMPRE SE QUEDA HASTA ABAJO -->
+    <footer class="border-top footer text-muted mt-auto">
+        <div class="container">
+            &copy; 2025 - FoodTouch - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <small>Versión: @ViewBag.AppVersion</small>
+        </div>
     </footer>
+
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

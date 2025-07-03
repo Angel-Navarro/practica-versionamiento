@@ -3,14 +3,27 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
+//Cookies
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
+
 namespace FoodTouch.Controllers
 {
+    [Authorize]
     public class CatPlatillosController : Controller
     {
+        private readonly ILogger<CatPlatillosController> _logger;
+
+        public CatPlatillosController(ILogger<CatPlatillosController> logger)
+        {
+            _logger = logger;
+        }
+
+        [Authorize(Roles = "Administrador")]
         // GET: CatPlatilloController
         public ActionResult Index()
         {
-            //Llenar combo box con lo de la base ed datos
+            //Llenar botones con lo de la base ed datos
             var categorias = Cat_Categorias_Platillos.ObtenerCategoriasCombo();
             return View(categorias);
 

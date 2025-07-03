@@ -142,7 +142,7 @@ namespace FoodTouch.Models
                 }
 
                 //Obtener 
-                string query = string.Format(@"SELECT ID,nombre,descripcion,precioG,precioCH,idCategoria,estatus FROM TBL_CAT_PLATILLOS '{0}'", parteQuery);
+                string query = string.Format(@"SELECT ID,nombre,descripcion,precioG,precioCH,idCategoria,estatus,imagen FROM TBL_CAT_PLATILLOS {0}", parteQuery);
                 conn.Open();
                 SqlCommand cmd = new SqlCommand(query, conn);
                 SqlDataReader dr = cmd.ExecuteReader();
@@ -155,13 +155,24 @@ namespace FoodTouch.Models
                         Cat_Platillos plato = new Cat_Platillos();
                         plato.ID = int.Parse(dr[0].ToString());
                         plato.nombre = dr[1].ToString();
-                        plato.descripcion = dr[3].ToString();
-                        plato.precioG = dr[4].ToString();
-                        plato.precioCH = dr[5].ToString();
-                        //plato.imagen = dr[6].ToString();
-                        plato.idCategoria = dr[6].ToString();
-                        plato.estatus = dr[7].ToString();
+                        plato.descripcion = dr[2].ToString();
+                        plato.precioG = dr[3].ToString();
+                        plato.precioCH = dr[4].ToString();
+                        plato.idCategoria = dr[5].ToString();
+                        plato.estatus = dr[6].ToString();
+
+                        byte[] imagenBytes = dr[7] as byte[];
+                        plato.imagen = imagenBytes;
+
+                        //Convertir la imagen Bytes en base64
+                        if (imagenBytes != null && imagenBytes.Length > 0)
+                        {
+                            string mime = "image/jpeg";
+                            plato.imagenBase64 = $"data:{mime};base64,{Convert.ToBase64String(imagenBytes)}";
+                        }
+
                         platillos.Add(plato);  //Para ir agregando a la lista.
+
                     }
                     dr.Close();
                     conn.Close();

@@ -9,6 +9,9 @@
         <div class="container d-flex justify-content-center align-items-center vh-100">
             <form asp-controller = "Acceso" asp-action = "Index" method="post" class="form">
                 <p class="form-title">Inicio de sesión</p>
+
+                <p class="">¿Eres parte de nosotros? Inicia sesión aqui</p>
+
                 <div class="input-container">
                     <input type="email" placeholder="Ingresa tu correo electrónico..." asp-for="correo">
                     <span>
@@ -24,48 +27,6 @@
         </div>
     </div>
 
-
-    <!-- Footer -->
-    <footer class="text-center text-lg-start text-white" style="background-color: #ffffff">
-        <!-- Grid container -->
-        <div class="container-fluid">
-
-            <!-- Section descripción -->
-            <section class=" pt-0">
-                <div class="row d-flex align-items-center">
-
-                    <div class="col-md-7 col-lg-8 text-center text-md-start">
-                        <div class="p-3 text-dark">
-                            © 2025 The Avenue:
-                            <a class="text-dark" href="#">Carretera Villa Hidalgo/Ags. Presa Juiquinaqui </a>
-                        </div>
-                    </div>
-
-                    <div class="col-md-5 col-lg-4 ml-lg-0 text-center text-md-end">
-
-                        <!-- IG -->
-                        <a class="btn btn-outline-light btn-floating m-1 icono-Footer" class="text-white" role="button">
-                            <i class="fa-brands fa-instagram fa-2xl" style="color: #000000;"></i>
-                        </a>
-
-                        <!-- Face -->
-                        <a class="btn btn-outline-light btn-floating m-1" class="text-white" role="button">
-                            <i class="fa-brands fa-facebook fa-2xl" style="color: #000000;"></i>
-                        </a>
-
-                        <!-- Wh -->
-                        <a class="btn btn-outline-light btn-floating m-1" class="text-white" role="button">
-                            <i class="fa-brands fa-whatsapp fa-2xl" style="color: #000000;"></i>
-                        </a>
-
-
-                    </div>
-
-                </div>
-            </section>
-
-        </div>
-    </footer>
 
 
     @section Scripts {

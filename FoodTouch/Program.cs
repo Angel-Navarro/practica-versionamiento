@@ -35,11 +35,14 @@ app.UseRouting();
 
 //Autenticacion
 app.UseAuthorization();
-
 app.UseAuthorization();
+
+// ⚠️ Este es el orden correcto:
+//app.UseAuthentication(); // Primero autenticación
+//app.UseAuthorization();  // Luego autorización
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Acceso}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

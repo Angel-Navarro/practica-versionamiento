@@ -6,7 +6,7 @@
 }
 
 <body>
-    <div class="container my-4 text-center">
+    <div class="container my-5 text-center">
         <h1 class="display-4 fs-2 font-weight-bold">Registro de platillos de la Categoría: @ViewBag.nombre</h1>
         <input type="text" id="p_id_CatPlati" value="@ViewBag.id" hidden/>
     </div>
@@ -14,7 +14,7 @@
     <div class="container">
         <div class="row my-5">
             <div class="col-sm-3">
-                <input type="number" placeholder="Clave" class="form-control" name="clave" />
+                <input type="text" placeholder="Buscar por nombre..." class="form-control" id="txtBuscadorPlatillos" />
             </div>
             <div class="col-sm-3">
                 <a href=""><i class="fa-solid fa-magnifying-glass fa-bounce fa-xl" style="color: #005eff;"></i></a>
