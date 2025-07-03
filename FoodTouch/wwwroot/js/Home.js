@@ -1,4 +1,5 @@
-﻿function ActualizarTarjetas() {
+﻿//Actualizar tarjetas buscando por categoria
+function ActualizarTarjetas() {
     const formData = new FormData();
     const idCategoria = document.getElementById("cmb_Categoria_Menu").value;
     formData.append("idCategoria", idCategoria);
@@ -28,6 +29,9 @@
                     `;
                     cardContainer.innerHTML += card;
                 });
+
+                AplicarFiltroBusqueda(); // Aplica el filtro sobre los nuevos elementos
+
             } else {
                 console.warn("La respuesta no es una lista.");
             }
@@ -37,34 +41,66 @@
         });
 }
 
-
-
-
-
-
-
-
-document.addEventListener("DOMContentLoaded", function () {
+//Funcion reutilizable para cada que se busque por categoria
+function AplicarFiltroBusqueda() {
     const inputBuscador = document.getElementById("txtBuscadorPlatillos_Menu");
     const tarjetas = document.querySelectorAll(".card__article");
+    const filtro = inputBuscador.value.toLowerCase();
 
-    inputBuscador.addEventListener("input", function () {
-        const filtro = inputBuscador.value.toLowerCase();
+    tarjetas.forEach(tarjeta => {
+        const nombre = tarjeta.querySelector(".card__title")?.textContent.toLowerCase() || "";
+        const descripcion = tarjeta.querySelector(".card__description")?.textContent.toLowerCase() || "";
+        const precios = tarjeta.querySelector(".card__button")?.textContent.toLowerCase() || "";
 
-        tarjetas.forEach(tarjeta => {
-            const nombre = tarjeta.querySelector(".card__title")?.textContent.toLowerCase() || "";
-            const descripcion = tarjeta.querySelector(".card__description")?.textContent.toLowerCase() || "";
-            const precios = tarjeta.querySelector(".card__button")?.textContent.toLowerCase() || "";
-
-            if (
-                nombre.includes(filtro) ||
-                descripcion.includes(filtro) ||
-                precios.includes(filtro)
-            ) {
-                tarjeta.style.display = "";
-            } else {
-                tarjeta.style.display = "none";
-            }
-        });
+        if (
+            nombre.includes(filtro) ||
+            descripcion.includes(filtro) ||
+            precios.includes(filtro)
+        ) {
+            tarjeta.style.display = "";
+        } else {
+            tarjeta.style.display = "none";
+        }
     });
+}
+
+
+
+//Escuchador para cada que se escriba sobre el input
+document.addEventListener("DOMContentLoaded", function () {
+    const inputBuscador = document.getElementById("txtBuscadorPlatillos_Menu");
+
+    inputBuscador.addEventListener("input", AplicarFiltroBusqueda);
 });
+
+
+
+
+
+
+
+
+//document.addEventListener("DOMContentLoaded", function () {
+//    const inputBuscador = document.getElementById("txtBuscadorPlatillos_Menu");
+//    const tarjetas = document.querySelectorAll(".card__article");
+
+//    inputBuscador.addEventListener("input", function () {
+//        const filtro = inputBuscador.value.toLowerCase();
+
+//        tarjetas.forEach(tarjeta => {
+//            const nombre = tarjeta.querySelector(".card__title")?.textContent.toLowerCase() || "";
+//            const descripcion = tarjeta.querySelector(".card__description")?.textContent.toLowerCase() || "";
+//            const precios = tarjeta.querySelector(".card__button")?.textContent.toLowerCase() || "";
+
+//            if (
+//                nombre.includes(filtro) ||
+//                descripcion.includes(filtro) ||
+//                precios.includes(filtro)
+//            ) {
+//                tarjeta.style.display = "";
+//            } else {
+//                tarjeta.style.display = "none";
+//            }
+//        });
+//    });
+//});
