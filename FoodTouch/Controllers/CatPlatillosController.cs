@@ -142,7 +142,7 @@ namespace FoodTouch.Controllers
             platillo.imagen = imagenBytes;
 
 
-            // Llama al metodo EnviarCorreo desde la instancia creada
+            // Llama al metodo agregar
             return Cat_Platillos.AgregarPlatillo(platillo);
         }
         [HttpPost]

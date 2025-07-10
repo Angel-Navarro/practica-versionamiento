@@ -1,4 +1,6 @@
-﻿function AgregarPlatillo() {
+﻿
+
+function AgregarPlatillo() {
     const nombre = document.getElementById("txt_Nombre_CatPlati").value.trim();
     const descripcion = document.getElementById("txt_Descr_CatPlati").value.trim();
     const precioG = document.getElementById("txt_PrecioG_CatPlati").value.trim();
@@ -8,6 +10,19 @@
     const imagen = document.getElementById("txt_Imagen_CatPlati").files[0];
 
     // Validaciones
+
+    // Validación SQL
+    if (!ValidacionSQL(nombre) || !ValidacionSQL(descripcion)) {
+        var modalInstance = bootstrap.Modal.getInstance(document.getElementById('ModalAgregarPlatillo'));
+        if (modalInstance) {
+            modalInstance.hide();
+        }
+        document.getElementById("lbl_Alerta_CatPlatillo").innerHTML = "Texto inválido: posible inyección SQL.";
+        var myModal = new bootstrap.Modal(document.getElementById('ModalAlerta_CatPlatillo'));
+        myModal.show();
+        return;
+    }
+
     if (!nombre || !descripcion || !precioG || !precioCH || !estatus || !imagen) {
 
         //Obtener instancia del modal ya abierto
@@ -21,6 +36,7 @@
 
         return;
     }
+
 
     const decimalRegex = /^\d+(\.\d{1,2})?$/;
     if (!decimalRegex.test(precioG) || !decimalRegex.test(precioCH)) {
@@ -388,6 +404,18 @@ function ModificarPlatillo() {
         return;
     }
 
+    // Validación SQL
+    if (!ValidacionSQL(nombre) || !ValidacionSQL(descripcion)) {
+        var modalInstance = bootstrap.Modal.getInstance(document.getElementById('ModalAgregarPlatillo'));
+        if (modalInstance) {
+            modalInstance.hide();
+        }
+        document.getElementById("lbl_Alerta_CatPlatillo").innerHTML = "Texto inválido: posible inyección SQL.";
+        var myModal = new bootstrap.Modal(document.getElementById('ModalAlerta_CatPlatillo'));
+        myModal.show();
+        return;
+    }
+
     // Validación de precios decimales
     const decimalRegex = /^\d+(\.\d{1,2})?$/;
     if (!decimalRegex.test(precioG) || !decimalRegex.test(precioCH)) {
@@ -415,6 +443,9 @@ function ModificarPlatillo() {
                     new bootstrap.Modal(document.getElementById('ModalInfo_CatPlatillo')).show();
                     ActualizarTabla();
                     LimpiarDatos();
+                }
+                if (respuesta.data === 'DATOS_INVALIDOS') {
+                    MostrarAlerta("Texto inválido: posible inyección SQL.");
                 } else {
                     MostrarAlerta("Error al guardar.");
                 }

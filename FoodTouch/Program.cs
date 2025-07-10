@@ -31,6 +31,34 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+
+
+
+
+//Politicas CSP
+//Middleware personalizado para agregar encabezado CSP a todas las respuestas
+//app.Use(async (context, next) =>
+//{
+//    context.Response.Headers.Add("Content-Security-Policy",
+//        "default-src 'self'; " +
+//        "script-src 'self' 'unsafe-inline' https://kit.fontawesome.com https://cdn.jsdelivr.net; " +
+//        "style-src 'self' 'unsafe-inline' https://kit-free.fontawesome.com; " +
+//        "font-src 'self' https://ka-f.fontawesome.com https://cdnjs.cloudflare.com; " +
+//        "connect-src *; " +
+//        "img-src 'self' data:; " +
+//        "object-src 'none'; " +
+//        "base-uri 'self'; " +
+//        "form-action 'self';");
+//    await next();
+//});
+
+
+
+
+
+
+
+
 app.UseRouting();
 
 //Autenticacion

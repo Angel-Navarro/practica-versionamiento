@@ -2,10 +2,22 @@
     <!-- Referencias -->
     <link rel="stylesheet" href="../css/Acceso.css">
     <script src="~/js/Cat_Platillos.js"></script>
+    <script src="~/js/Globales.js"></script>
     @model List<Cat_Platillos>
 }
 
 <body>
+
+    <div class="row mt-5">
+        <div class="col-sm-2">
+            <a href="javascript:history.back()" title="Regresar">
+                <i class="fa-solid fa-circle-arrow-left"></i>
+            </a>
+        </div>
+
+        <div class="col-10"></div>
+    </div>
+
     <div class="container my-5 text-center">
         <h1 class="display-4 fs-2 font-weight-bold">Registro de platillos de la Categoría: @ViewBag.nombre</h1>
         <input type="text" id="p_id_CatPlati" value="@ViewBag.id" hidden/>

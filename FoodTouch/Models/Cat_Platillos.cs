@@ -202,6 +202,12 @@ namespace FoodTouch.Models
         #region Insert
         public static string AgregarPlatillo(Cat_Platillos platillo)
         {
+            // Validación de inyección SQL
+            if (!Globales.ValidacionSQL(platillo.nombre) || !Globales.ValidacionSQL(platillo.descripcion))
+            {
+                return "DATOS_INVALIDOS";
+            }
+
             platillo.ID = ObtenerUltimoIdMasUno();
 
             SqlConnection conn = new SqlConnection(Globales.GlobalVariables.conexion_db);
@@ -231,6 +237,11 @@ namespace FoodTouch.Models
         #region Update
         public static string ModificarPlatillo(Cat_Platillos platillo)
         {
+            // Validación de inyección SQL
+            if (!Globales.ValidacionSQL(platillo.nombre) || !Globales.ValidacionSQL(platillo.descripcion))
+            {
+                return "DATOS_INVALIDOS";
+            }
 
             SqlConnection conn = new SqlConnection(Globales.GlobalVariables.conexion_db);
             try
@@ -266,6 +277,8 @@ namespace FoodTouch.Models
 
         #region Extras
 
+        //Convertir a HexString para guardar en la BDD
+
         public static string ByteArrayToHexString(byte[] bytes)
         {
             if (bytes == null || bytes.Length == 0)
@@ -273,6 +286,9 @@ namespace FoodTouch.Models
 
             return "0x" + BitConverter.ToString(bytes).Replace("-", "");
         }
+
+
+
 
         #endregion
 

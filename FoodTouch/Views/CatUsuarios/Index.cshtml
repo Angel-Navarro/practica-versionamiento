@@ -1,0 +1,215 @@
+﻿@{
+    <!-- Referencias -->
+    <script src="~/js/Cat_Usuarios.js"></script>
+    @model List<Cat_Usuarios>
+
+}
+
+<body>
+    <div class="container my-5 text-center">
+        <h1 class="display-4 fs-2 font-weight-bold">Registro de Usuarios</h1>
+    </div>
+
+    <div class="container">
+        <div class="row my-5">
+            <div class="col-sm-3">
+                <input type="text" placeholder="Buscar por nombre..." class="form-control" id="txtBuscadorUsuarios_CatUsu" />
+            </div>
+            <div class="col-sm-3">
+                <a href=""><i class="fa-solid fa-magnifying-glass fa-bounce fa-xl" style="color: #005eff;"></i></a>
+            </div>
+            <div class="col-sm-3"></div>
+            <div class="col-sm-3">
+                <a class="btn btn-primary col-sm-12" data-bs-toggle="modal" data-bs-target="#ModalAgregarUsuario">Agregar</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container my-4 text-center fs-6">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <td>Nombre</td>
+                    <td>Correo</td>
+                    <td>Clave</td>
+                    <td>Rol</td>
+                    <td>Editar</td>
+                </tr>
+            </thead>
+            <tbody id="tbody_CatUsu">
+
+                @foreach (var usuario in Model)
+                {
+                    <tr>
+                        <td>@usuario.nombre</td>
+                        <td>@usuario.correo</td>
+                        <td>••••••••</td>
+                        <td>@usuario.rol</td>
+                        <td>
+                            <button type="button" class="border-0" style="background-color: #00FF0000;"
+                                    onclick="MostrarModalModificarUsuario('@usuario.ID|@usuario.nombre|@usuario.correo|@usuario.clave|@usuario.rol')">
+                                <i class="fa-solid fa-pencil fa-bounce" style="color: #11ff00;"></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</body>
+
+
+<!-- ModalAgregarUsuario -->
+<div class="modal fade" id="ModalAgregarUsuario" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <!-- Encabezado del modal -->
+            <div class="modal-header">
+                <h5 class="modal-title" id="miModalLabel">Agregar</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+
+            <!-- Cuerpo del modal -->
+            <div class="modal-body">
+
+                <div class="row mt-3">
+                    <div class="col-sm-12">
+                        <label for="exampleFormControlInput1">Nombre</label>
+                        <input id="txt_Nombre_CatUsu" type="text" class="form-control" placeholder="Nombre...">
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-sm-12">
+                        <label for="exampleFormControlInput1">Córreo</label>
+                        <input id="txt_Correo_CatUsu" rows="3" class="form-control" placeholder="Córreo...">
+
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-sm-6">
+                        <label for="exampleFormControlInput1">Clave</label>
+                        <input id="txt_Clave_CatUsu" type="text" class="form-control" placeholder="Clave...">
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="cmb_Rol_CatUsu" class="mb-0">Rol</label>
+                        <select id="cmb_Rol_CatUsu" class="form-select form-select-sm w-auto">
+                            <option value="Administrador">Administrador</option>
+                            <option value="Cocinero">Cocinero</option>
+                            <option value="Mesero">Mesero</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pie del modal -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button onclick="AgregarUsuario()" type="button" class="btn btn-primary">Guardar</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- ModalModificarPlatillo -->
+<div class="modal fade" id="ModalModificarUsuario" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <!-- Encabezado del modal -->
+            <div class="modal-header">
+                <h5 class="modal-title" id="miModalLabel">Modificar</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+
+            <div class="modal-body">
+
+                <!--Input para id-->
+                <input type="text" id="txt_ModiId_CatUsu" value="@ViewBag.id" hidden />
+
+                <div class="row mt-3">
+                    <div class="col-sm-12">
+                        <label for="exampleFormControlInput1">Nombre</label>
+                        <input id="txt_ModiNombre_CatUsu" type="text" class="form-control" placeholder="Nombre...">
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-sm-12">
+                        <label for="exampleFormControlInput1">Córreo</label>
+                        <input id="txt_ModiCorreo_CatUsu" rows="3" class="form-control" placeholder="Córreo...">
+
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-sm-6">
+                        <label for="exampleFormControlInput1">Clave</label>
+                        <input id="txt_ModiClave_CatUsu" type="password" class="form-control" placeholder="Clave...">
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="cmb_ModiRol_CatUsu" class="mb-0">Rol</label>
+                        <select id="cmb_ModiRol_CatUsu" class="form-select form-select-sm w-auto">
+                            <option value="Administrador">Administrador</option>
+                            <option value="Cocinero">Cocinero</option>
+                            <option value="Mesero">Mesero</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Pie del modal -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button id="btn_Modificar_CatUsu" type="button" class="btn btn-primary" onclick="ModificarUsuario()">Guardar</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!--Modal alerta-->
+<div class="modal fade" id="ModalAlerta_CatUsu" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12 text-center">
+                        <i class="fa-solid fa-triangle-exclamation fa-bounce fa-2xl" style="color: #ff0000;"></i>
+                        <br />
+                        <label id="lbl_Alerta_CatUsu"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary rounded-button" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal info-->
+<div class="modal fade" id="ModalInfo_CatUsu" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12 text-center">
+                        <i class="fa-solid fa-circle-info fa-bounce fa-2xl" style="color: #005eff;"></i>
+                        <br />
+                        <label id="lbl_Info_CatUsu"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary rounded-button" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+

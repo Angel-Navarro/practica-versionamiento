@@ -1,0 +1,52 @@
+﻿    @*
+        For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+    *@
+    @{
+    }
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Ubicación del restaurante</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- CSS de Leaflet -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+        <style>
+            #map {
+                height: 500px;
+                width: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <h2 class="mt-5">Restaurant La Avenida (Ubicación)</h2>
+        <div id="map"></div>
+
+        <!-- JS de Leaflet -->
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+        <script>
+            // Coordenadas 
+            var lat = 21.69965324158613;
+            var lon = -102.54299314569471;
+
+            // Crear el mapa centrado en la ubicación
+            var map = L.map('map').setView([lat, lon], 13);
+
+            // Añadir el mapa base de OpenStreetMap
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 18,
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            // Añadir un marcador
+            L.marker([lat, lon])
+                .addTo(map)
+                .bindPopup('Restaurant Avenida en Presa Juiquinaqui')
+                .openPopup();
+        </script>
+    </body>
+    </html>

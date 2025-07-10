@@ -45,6 +45,11 @@ namespace FoodTouch.Controllers
 
         }
 
+        public IActionResult Ubicacion()
+        {
+            return View();
+        }
+
         //Para mandar varias listas a la vista
         //public class MenuViewModel
         //{
