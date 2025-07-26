@@ -44,7 +44,8 @@ namespace FoodTouch.Controllers
                 var claims = new List<Claim> {
 
                     new Claim(ClaimTypes.Name, usuario.nombre),
-                    new Claim("Correo", usuario.correo)
+                    new Claim("Correo", usuario.correo),
+                    new Claim("ID", usuario.id.ToString())
 
                 };
 

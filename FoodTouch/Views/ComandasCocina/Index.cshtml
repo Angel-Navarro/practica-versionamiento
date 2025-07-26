@@ -1,0 +1,186 @@
+﻿@{
+    <link rel="stylesheet" href="../css/ComandasCocina.css">
+    var platillos = ViewBag.platillos as List<Cat_Platillos>;
+    var comandas = ViewBag.listaComandas as List<Comandas>;
+    <script src="~/js/ComandasCocina.js"></script>
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comandas - Sistema de Restaurante</title>
+</head>
+<body>
+
+    <div class="row mt-4 mb-4">
+        <div class="col-sm-12">
+            <label>Fecha</label>
+            <input type="date" id="txt_FechaComandas_ComMes" class="form-control">
+        </div>
+    </div>
+
+    <div class="container">
+        @if (comandas != null && comandas.Any())
+        {
+            @foreach (var comanda in comandas)
+            {
+                <div class="comanda-card">
+                    <div class="comanda-header @(comanda.estado.ToLower())">
+                        <div class="comanda-info">
+                            <div class="comanda-number">
+                                <button class="toggle-btn">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M7 10l5 5 5-5z" />
+                                    </svg>
+                                </button>
+                                <div id="lbl_PlatEstatus_ComMes_@comanda.ID">
+                                    @if (comanda.estado.ToLower() == "pending")
+                                    {
+                                        <i class="fa-solid fa-circle-pause fa-lg" style="color: #ffc107;"></i>
+                                    }
+                                    else if (comanda.estado.ToLower() == "completed")
+                                    {
+                                        <i class="fa-solid fa-circle-check fa-lg" style="color: #28a745;"></i>
+                                    }
+                                    else if (comanda.estado.ToLower() == "in-progress")
+                                    {
+                                        <i class="fa-solid fa-clock fa-lg" style="color: #ff9800;"></i>
+                                    }
+                                </div>
+                                Comanda #@comanda.ID.ToString("000")
+                                <input hidden id="txt_PlatId_ComMes_@comanda.ID" value="@comanda.ID" />
+                            </div>
+                            <div class="comanda-time">
+                                @{
+                                    DateTime fechaHora;
+                                    if (DateTime.TryParse(comanda.fechaHora, out fechaHora))
+                                    {
+                                        @fechaHora.ToString("HH:mm")
+                                    }
+                                    else
+                                    {
+                                        @comanda.fechaHora
+                                    }
+                                }
+                            </div>
+                        </div>
+                        <div class="comanda-details">
+                            <div>Mesa @comanda.mesa</div>
+                            <div>@comanda.usuarioNombre</div>
+                        </div>
+                        <!-- Botón de estado para toda la comanda -->
+                        <div class="comanda-status-btn">
+                            <button class="status-toggle-btn-comanda comanda-status @comanda.estado.ToLower()"
+                                    data-comanda-id="@comanda.ID"
+                                    data-status="@comanda.estado.ToLower()"
+                                    onclick="toggleComandaStatus(@comanda.ID)"
+                                    title="@(comanda.estado.ToLower() == "completed" ? "Comanda Completada" : "Completar Comanda")">
+                                @if (comanda.estado.ToLower() == "pending")
+                                {
+                                    <i class="fas fa-utensils"></i>
+                                }
+                                else if (comanda.estado.ToLower() == "in-progress")
+                                {
+                                    <i class="fas fa-fire"></i>
+                                }
+                                else if (comanda.estado.ToLower() == "completed")
+                                {
+                                    <i class="fas fa-crown"></i>
+                                }
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="comanda-content">
+                        <!--Lista de platillos-->
+                        <div class="platillos-list">
+                            @if (comanda.listaPlatillos != null && comanda.listaPlatillos.Any())
+                            {
+                                @foreach (var platillo in comanda.listaPlatillos)
+                                {
+                                    <div class="platillo-item" data-platillo-id="@platillo.ID">
+                                        <div class="status-badge @(platillo.estado.ToLower())">
+                                            @if (platillo.estado.ToLower() == "pending")
+                                            {
+                                                <text>⏸</text>
+                                            }
+                                            else if (platillo.estado.ToLower() == "completed")
+                                            {
+                                                <text>✓</text>
+                                            }
+                                            else if (platillo.estado.ToLower() == "in-progress")
+                                            {
+                                                <text>🔥</text>
+                                            }
+                                        </div>
+                                        <div class="platillo-header">
+                                            <div class="platillo-info">
+                                                <div class="platillo-name">@platillo.nombrePlatillo</div>
+                                                <div class="platillo-size @(platillo.tamano.ToLower())">@platillo.tamano</div>
+                                            </div>
+                                            <div class="platillo-quantity">@platillo.cantidad</div>
+                                        </div>
+                                        @if (!string.IsNullOrEmpty(platillo.notas))
+                                        {
+                                            <div class="platillo-notes">@platillo.notas</div>
+                                        }
+                                        <div class="container-fluid platillo-notes">
+                                            <label>Precio Unitario $: </label>
+                                            <label>@((platillo.precioTotal / platillo.cantidad).ToString("F2"))</label>&nbsp;
+                                            <label>Precio Total $: </label>
+                                            <label>@platillo.precioTotal.ToString("F2")</label>
+                                        </div>
+                                        <!-- Botón de estado para cada platillo -->
+                                        <div class="platillo-actions">
+                                            <button class="status-toggle-btn platillo-status @platillo.estado.ToLower()"
+                                                    data-platillo-id="@platillo.ID"
+                                                    data-comanda-id="@comanda.ID"
+                                                    data-status="@platillo.estado.ToLower()"
+                                                    onclick="togglePlatilloStatus(@platillo.ID, @comanda.ID)">
+                                                @if (platillo.estado.ToLower() == "pending")
+                                                {
+                                                    <i class="fas fa-play-circle"></i>
+                                                    <span class="status-text">Iniciar Preparación</span>
+                                                }
+                                                else if (platillo.estado.ToLower() == "in-progress")
+                                                {
+                                                    <i class="fas fa-check-circle"></i>
+                                                    <span class="status-text">Marcar Listo</span>
+                                                }
+                                                else if (platillo.estado.ToLower() == "completed")
+                                                {
+                                                    <i class="fas fa-medal"></i>
+                                                    <span class="status-text">Completado</span>
+                                                }
+                                            </button>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="platillo-item">
+                                    <div class="platillo-notes">No hay platillos en esta comanda</div>
+                                </div>
+                            }
+                        </div>
+
+                        <div class="total-section">
+                            Total: $@comanda.listaPlatillos?.Sum(p => p.precioTotal).ToString("F2")
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="no-comandas">
+                <p>No hay comandas para el día de hoy.</p>
+            </div>
+        }
+    </div>
+
+</body>
+</html>

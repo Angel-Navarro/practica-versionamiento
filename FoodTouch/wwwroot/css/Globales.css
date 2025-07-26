@@ -6,3 +6,11 @@
 .mt-6 {
     margin-top: 5rem;
 }
+
+.footer {
+    height: 60px; /* Define altura fija */
+}
+
+main {
+    margin-bottom: 15px; /* Mismo valor que la altura del footer */
+}

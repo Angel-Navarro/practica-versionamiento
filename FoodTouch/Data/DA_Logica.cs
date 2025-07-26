@@ -105,7 +105,7 @@ namespace FoodTouch.Data
 
             using (SqlConnection conn = new SqlConnection(Globales.GlobalVariables.conexion_db))
             {
-                string query = @"SELECT nombre, correo, clave, roles 
+                string query = @"SELECT id, nombre, correo, clave, roles 
                                  FROM TBL_Usuarios 
                                  WHERE correo = @correo AND clave = @clave";
 
@@ -122,6 +122,7 @@ namespace FoodTouch.Data
                             dr.Read();
                             usuario = new Usuario
                             {
+                                id = dr["id"].ToString(),
                                 nombre = dr["nombre"].ToString(),
                                 correo = dr["correo"].ToString(),
                                 clave = dr["clave"].ToString(),

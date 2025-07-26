@@ -15,6 +15,9 @@
     <!--Axios-->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
+    <!--Globales-->
+    <link rel="stylesheet" href="../css/Globales.css">
+
     <!--Declarar variables globales que necesita JS-->
     <script>
         //const urlServer = "https://@Globales.GlobalVariables.server";
@@ -55,7 +58,18 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="CatUsuarios" asp-action="Index">Configuracion de Usuarios</a>
                             </li>
                         }
-
+                        @if (User.IsInRole("Administrador") || User.IsInRole("Cocinero"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="ComandasCocina" asp-action="Index">Comandas cocina</a>
+                            </li>
+                        }
+                        @if (User.IsInRole("Administrador") || User.IsInRole("Mesero"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="ComandasMeseros" asp-action="Index">Comandas mesero</a>
+                            </li>
+                        }
 
 
                         <!---->
@@ -87,8 +101,8 @@
     </div> *@
 
     <!-- CONTENIDO PRINCIPAL -->
-    <main class="flex-fill">
-        <div class="container pt-3">
+    <main class="flex-fill pt-5 pb-5">
+        <div class="container pt-3 pb-4">
             @RenderBody()
         </div>
     </main>
@@ -103,10 +117,14 @@
     </footer> *@
 
     <!-- FOOTER QUE SIEMPRE SE QUEDA HASTA ABAJO -->
-    <footer class="border-top footer text-muted mt-auto">
-        <div class="container">
-            &copy; 2025 - FoodTouch - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-            <small>Versión: @ViewBag.AppVersion</small>
+    <footer class="border-top footer text-muted">
+        <div class="container d-flex justify-content-between align-items-center py-3">
+            <div>
+                &copy; 2025 - FoodTouch - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </div>
+            <div>
+                <small>Versión: @ViewBag.AppVersion</small>
+            </div>
         </div>
     </footer>
 

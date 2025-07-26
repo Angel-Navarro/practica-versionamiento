@@ -1,0 +1,448 @@
+﻿@{
+    <link rel="stylesheet" href="../css/ComandasGlobal.css">
+    var platillos = ViewBag.platillos as List<Cat_Platillos>;
+    var platillosPrecio = ViewBag.platillosPrecio as List<Cat_Platillos>;
+    var comandas = ViewBag.listaComandas as List<Comandas>;
+    var preciosJson = Newtonsoft.Json.JsonConvert.SerializeObject(platillosPrecio);
+    <script src="~/js/ComandasMeseros.js"></script>
+}
+<script>
+    // Este objeto estará disponible en tu JS global
+    const preciosPlatillos = @Html.Raw(preciosJson);
+</script>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comandas - Sistema de Restaurante</title>
+</head>
+<body>
+
+    <div class="row mt-4 mb-4">
+        <div class="col-sm-12">
+            <label>Fecha</label>
+            <input type="date" id="txt_FechaComandas_ComMes" class="form-control">
+        </div>
+    </div>
+
+
+    <div class="container">
+        <!-- Aquí habrá un ForEach para las comandas existentes -->
+        @if (comandas != null && comandas.Any())
+        {
+            @foreach (var comanda in comandas)
+            {
+                <div class="comanda-card">
+                    <div class="comanda-header @(comanda.estado.ToLower())">
+                        <div class="comanda-info">
+                            <div class="comanda-number">
+                                <button class="toggle-btn" onclick="toggleComanda(this)">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M7 10l5 5 5-5z" />
+                                    </svg>
+                                </button>
+                                <div id="lbl_PlatEstatus_ComMes_@comanda.ID">
+                                    @if (comanda.estado.ToLower() == "pending")
+                                    {
+                                        <i class="fa-solid fa-circle-check fa-lg" style="color: #d80e0e;"></i>
+                                    }
+                                    else if (comanda.estado.ToLower() == "completed")
+                                    {
+                                        <i class="fa-solid fa-circle-check fa-lg" style="color: #28a745;"></i>
+                                    }
+                                    else if (comanda.estado.ToLower() == "in-progress")
+                                    {
+                                        <i class="fa-solid fa-clock fa-lg" style="color: #ffc107;"></i>
+                                    }
+                                </div>
+                                Comanda #@comanda.ID.ToString("000")
+                                <input hidden id="txt_PlatId_ComMes_@comanda.ID" value="@comanda.ID" />
+                            </div>
+                            <div class="comanda-time">
+                                @{
+                                    DateTime fechaHora;
+                                    if (DateTime.TryParse(comanda.fechaHora, out fechaHora))
+                                    {
+                                        @fechaHora.ToString("HH:mm")
+                                    }
+                                    else
+                                    {
+                                        @comanda.fechaHora
+                                    }
+                                }
+                            </div>
+                        </div>
+                        <div class="comanda-details">
+                            <div>Mesa @comanda.mesa</div>
+                            <div>@comanda.usuarioNombre</div>
+                        </div>
+                    </div>
+
+                    <div class="comanda-content">
+                        <div class="comanda-actions">
+@*                             <button class="action-btn danger" onclick="cancelarComanda(@comanda.ID)">Cancelar</button>
+                            <button class="action-btn primary" onclick="iniciarComanda(@comanda.ID)">Iniciar</button> *@
+                        </div>
+
+                        <!--Lista de platillos-->
+                        <div class="platillos-list">
+                            @if (comanda.listaPlatillos != null && comanda.listaPlatillos.Any())
+                            {
+                                @foreach (var platillo in comanda.listaPlatillos)
+                                {
+                                    <div class="platillo-item">
+                                        <div class="status-badge @(platillo.estado.ToLower())">
+                                            @if (platillo.estado.ToLower() == "pending")
+                                            {
+                                                <text>!</text>
+                                            }
+                                            else if (platillo.estado.ToLower() == "completed")
+                                            {
+                                                <text>✓</text>
+                                            }
+                                            else if (platillo.estado.ToLower() == "in-progress")
+                                            {
+                                                <text>⏱</text>
+                                            }
+                                        </div>
+                                        <div class="platillo-header">
+                                            <div class="platillo-info">
+                                                <div class="platillo-name">@platillo.nombrePlatillo</div>
+                                                <div class="platillo-size @(platillo.tamano.ToLower())">@platillo.tamano</div>
+                                            </div>
+                                            <div class="platillo-quantity">@platillo.cantidad</div>
+                                        </div>
+                                        @if (!string.IsNullOrEmpty(platillo.notas))
+                                        {
+                                            <div class="platillo-notes">@platillo.notas</div>
+                                        }
+                                        <div class="container-fluid platillo-notes">
+                                            <label>Precio Unitario $: </label>
+                                            <label>@((platillo.precioTotal / platillo.cantidad).ToString("F2"))</label>&nbsp;
+                                            <label>Precio Total $: </label>
+                                            <label>@platillo.precioTotal.ToString("F2")</label>
+                                        </div>
+                                        <div class="platillo-actions">
+@*                                             <button class="action-btn primary" onclick="modificarPlatillo(@platillo.ID)">Modificar</button> *@
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="platillo-item">
+                                    <div class="platillo-notes">No hay platillos en esta comanda</div>
+                                </div>
+                            }
+                        </div>
+
+                        <div class="total-section">
+                            Total: $@comanda.listaPlatillos?.Sum(p => p.precioTotal).ToString("F2")
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="no-comandas">
+                <p>No hay comandas para el día de hoy.</p>
+            </div>
+        }
+
+
+
+
+
+
+        <!-- Comanda 1 (Ejemplo de comanda existente) -->
+@*         <div class="comanda-card">
+            <div class="comanda-header pending">
+                <div class="comanda-info">
+                    <div class="comanda-number">
+                        <button class="toggle-btn" onclick="toggleComanda(this)">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M7 10l5 5 5-5z" />
+                            </svg>
+                        </button>
+                        <div id="lbl_PlatEstatus_ComMes">
+                            <i class="fa-solid fa-circle-check fa-lg" style="color: #d80e0e;"></i>
+                        </div>
+                        Comanda #001
+                        <input hidden id="txt_PlatId_ComMes" />
+                    </div>
+                    <div class="comanda-time">14:30</div>
+                </div>
+                <div class="comanda-details">
+                    <div>Mesa 5</div>
+                    <div>Juan Pérez</div>
+                </div>
+            </div>
+
+            <div class="comanda-content">
+                <div class="comanda-actions">
+                    <button class="action-btn danger">Cancelar</button>
+                    <button class="action-btn primary">Iniciar</button>
+                </div>
+
+                <!--Lista de platillos-->
+                <div class="platillos-list">
+
+                    <div class="platillo-item">
+                        <div class="status-badge pending">!</div>
+                        <div class="platillo-header">
+                            <div class="platillo-info">
+                                <div class="platillo-name">Hamburguesa Clásica</div>
+                                <div class="platillo-size grande">Grande</div>
+                            </div>
+                            <div class="platillo-quantity">2</div>
+                        </div>
+                        <div class="platillo-notes">Sin cebolla, extra queso</div>
+                        <div class="container-fluid platillo-notes">
+                            <label>Precio Unitario $: </label>
+                            <label>120</label>&nbsp;
+                            <label>Precio Total $: </label>
+                            <label>240</label>
+                        </div>
+                        <div class="platillo-actions">
+                            <button class="action-btn primary">Modificar</button>
+                        </div>
+                    </div>
+                    <div class="platillo-item">
+                        <div class="status-badge pending">!</div>
+                        <div class="platillo-header">
+                            <div class="platillo-info">
+                                <div class="platillo-name">Hamburguesa Clásica</div>
+                                <div class="platillo-size grande">Grande</div>
+                            </div>
+                            <div class="platillo-quantity">2</div>
+                        </div>
+                        <div class="platillo-notes">Sin cebolla, extra queso</div>
+                        <div class="container-fluid platillo-notes">
+                            <label>Precio Unitario $: </label>
+                            <label>120</label>&nbsp;
+                            <label>Precio Total $: </label>
+                            <label>240</label>
+                        </div>
+                        <div class="platillo-actions">
+                            <button class="action-btn primary">Modificar</button>
+                        </div>
+                    </div>
+                    <div class="platillo-item">
+                        <div class="status-badge pending">!</div>
+                        <div class="platillo-header">
+                            <div class="platillo-info">
+                                <div class="platillo-name">Hamburguesa Clásica</div>
+                                <div class="platillo-size grande">Grande</div>
+                            </div>
+                            <div class="platillo-quantity">2</div>
+                        </div>
+                        <div class="platillo-notes">Sin cebolla, extra queso</div>
+                        <div class="container-fluid platillo-notes">
+                            <label>Precio Unitario $: </label>
+                            <label>120</label>&nbsp;
+                            <label>Precio Total $: </label>
+                            <label>240</label>
+                        </div>
+                        <div class="platillo-actions">
+                            <button class="action-btn primary">Modificar</button>
+                        </div>
+                    </div>
+                    <div class="platillo-item">
+                        <div class="status-badge pending">!</div>
+                        <div class="platillo-header">
+                            <div class="platillo-info">
+                                <div class="platillo-name">Hamburguesa Clásica</div>
+                                <div class="platillo-size grande">Grande</div>
+                            </div>
+                            <div class="platillo-quantity">2</div>
+                        </div>
+                        <div class="platillo-notes">Sin cebolla, extra queso</div>
+                        <div class="container-fluid platillo-notes">
+                            <label>Precio Unitario $: </label>
+                            <label>120</label>&nbsp;
+                            <label>Precio Total $: </label>
+                            <label>240</label>
+                        </div>
+                        <div class="platillo-actions">
+                            <button class="action-btn primary">Modificar</button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="total-section">
+                    Total: $240.00
+                </div>
+            </div>
+        </div> *@
+
+        <!-- Botón para agregar nueva comanda -->
+        <div class="text-center mt-3 mb-3">
+            <button class="action-btn primary" onclick="mostrarComandaAgregar()" style="padding: 12px 24px; font-size: 16px;">
+                <i class="fa-solid fa-plus"></i> Agregar Nueva Comanda
+            </button>
+        </div>
+
+        <!-- Comanda Agregar (Inicialmente oculta) -->
+        <div class="comanda-card" id="comandaAgregar" style="display: none;">
+            <div class="comanda-header pending">
+                <div class="comanda-info">
+                    <div class="comanda-number">
+                        <button class="toggle-btn" onclick="toggleComanda(this)">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M7 10l5 5 5-5z" />
+                            </svg>
+                        </button>
+                        <div>
+                            <i class="fa-solid fa-circle-plus fa-lg" style="color: #28a745;"></i>
+                        </div>
+                        Nueva Comanda
+                    </div>
+                    <div class="comanda-time" id="hora-nueva-comanda">--:--</div>
+                </div>
+                <div class="comanda-details">
+                    <div>
+@*                         <select class="form-control" style="display: inline-block; width: auto;">
+                            <option>Mesa 1</option>
+                            <option>Mesa 2</option>
+                            <option>Mesa 3</option>
+                            <option>Mesa 4</option>
+                            <option>Mesa 5</option>
+                        </select> *@
+                    </div>
+                    <div>
+                        <select class="form-control" style="display: inline-block; width: auto;">
+                            <option>Mesa 1</option>
+                            <option>Mesa 2</option>
+                            <option>Mesa 3</option>
+                            <option>Mesa 4</option>
+                            <option>Mesa 5</option>
+                        </select>
+                        @* <input type="text" class="form-control" placeholder="Nombre del cliente" style="display: inline-block; width: 200px;">
+ *@
+                    </div>
+                </div>
+            </div>
+
+            <div class="comanda-content">
+                <div class="comanda-actions">
+                    <button class="action-btn danger" onclick="ocultarComandaAgregar()">Cancelar</button>
+                    <button class="action-btn success" onclick="guardarNuevaComanda()">Guardar Comanda</button>
+                    <button class="action-btn warning" data-bs-toggle="modal" data-bs-target="#ModalAgregarPlatillo_ComMes">
+                        <i class="fa-solid fa-plus"></i> Agregar Platillo
+                    </button>
+                </div>
+
+                <!--Lista de platillos que se va llenando dinámicamente-->
+                <div class="platillos-list">
+                    <div class="text-center text-muted p-3">
+                        <i>No hay platillos agregados</i>
+                    </div>
+                </div>
+
+                <div class="total-section">
+                    Total: $0.00
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Modal de agregar platillo de comanda nueva-->
+    <div class="modal fade" id="ModalAgregarPlatillo_ComMes" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <!-- Encabezado del modal -->
+                <div class="modal-header">
+                    <h5 class="modal-title" id="miModalLabel">Agregar Platillo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+
+                <!-- Cuerpo del modal -->
+                <div class="modal-body">
+                    <div class="row mt-3">
+                        <div class="col-sm-12">
+                            <label>Platillo</label>
+                            <input type="text"
+                                   id="cmb_PlatilloMod_ComMes"
+                                   class="form-control"
+                                   list="platillos-list"
+                                   placeholder="Escriba para buscar..."
+                                   autocomplete="off">
+
+                            <datalist id="platillos-list">
+                                @foreach (var platillo in platillos)
+                                {
+                                    <option value="@platillo.nombre" data-id="@platillo.ID"></option>
+                                }
+                            </datalist>
+                        </div>
+                    </div>
+
+                    <input type="hidden" id="txt_IdPlatilloMod_ComMes" class="form-control">
+
+                    <div class="row mt-3">
+                        <div class="col-sm-6">
+                            <label>Tamaño</label>
+                            <select id="txt_TamanoMod_ComMes" class="form-control">
+                                <option value="CHICO">CHICO</option>
+                                <option value="GRANDE">GRANDE</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6">
+                            <label>Cantidad</label>
+                            <input id="txt_CantidadMod_ComMes" class="form-control" type="number" min="1" step="1" value="1" placeholder="Cantidad">
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-sm-6">
+                            <label>Precio Unitario</label>
+                            <input id="txt_PrecioUniMod_ComMes" class="form-control" readonly>
+                        </div>
+                        <div class="col-sm-6">
+                            <label>Total</label>
+                            <input id="txt_PrecioTotMod_ComMes" class="form-control" readonly>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-sm-12">
+                            <label>Notas</label>
+                            <textarea id="txt_NotasMod_ComMes" rows="3" class="form-control" placeholder="Notas especiales..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pie del modal -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button onclick="AgregarPlatilloAModal()" type="button" class="btn btn-primary">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script para actualizar la hora en tiempo real -->
+    <script>
+        // Actualizar hora cada segundo
+        setInterval(function() {
+            const now = new Date();
+            const timeString = now.getHours().toString().padStart(2, '0') + ':' +
+                             now.getMinutes().toString().padStart(2, '0');
+            const horaElement = document.getElementById('hora-nueva-comanda');
+            if (horaElement) {
+                horaElement.textContent = timeString;
+            }
+        }, 1000);
+    </script>
+
+</body>
+</html>
+
+<script>
+    // Pasar los datos de precios al JavaScript
+    window.platillosPrecios = @Html.Raw(Json.Serialize(ViewBag.platillosPrecio));
+</script>

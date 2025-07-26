@@ -196,6 +196,99 @@ namespace FoodTouch.Models
             }
 
         }
+        public static List<Cat_Platillos> ObtenerPlatillosCombo()
+        {
+            SqlConnection conn = new SqlConnection(Globales.GlobalVariables.conexion_db);
+            try
+            {
+
+                //Obtener 
+                string query = string.Format(@"SELECT ID,nombre,precioG,precioCH FROM TBL_CAT_PLATILLOS WHERE estatus='ACTIVO'");
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(query, conn);
+                SqlDataReader dr = cmd.ExecuteReader();
+
+                if (dr.HasRows)
+                {
+                    List<Cat_Platillos> platillos = new List<Cat_Platillos>();
+                    while (dr.Read())
+                    {
+                        Cat_Platillos plato = new Cat_Platillos();
+                        plato.ID = int.Parse(dr[0].ToString());
+                        plato.nombre = dr[1].ToString();
+                        plato.precioG = dr[2].ToString();
+                        plato.precioCH = dr[3].ToString();
+                        platillos.Add(plato);  //Para ir agregando a la lista.
+                    }
+                    dr.Close();
+                    conn.Close();
+                    cmd.Dispose();
+                    conn.Dispose();
+                    return platillos;
+                }
+                else
+                {
+                    dr.Close();
+                    conn.Close();
+                    conn.Dispose();
+                    cmd.Dispose();
+                    return new List<Cat_Platillos>();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return new List<Cat_Platillos>();
+            }
+
+        }
+
+        public static List<Cat_Platillos> ObtenerPlatillosPrecio()
+        {
+            SqlConnection conn = new SqlConnection(Globales.GlobalVariables.conexion_db);
+            try
+            {
+
+                //Obtener 
+                string query = string.Format(@"SELECT ID,nombre,precioG,precioCH FROM TBL_CAT_PLATILLOS");
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(query, conn);
+                SqlDataReader dr = cmd.ExecuteReader();
+
+                if (dr.HasRows)
+                {
+                    List<Cat_Platillos> platillos = new List<Cat_Platillos>();
+                    while (dr.Read())
+                    {
+                        Cat_Platillos plato = new Cat_Platillos();
+                        plato.ID = int.Parse(dr[0].ToString());
+                        plato.nombre = dr[1].ToString();
+                        plato.precioG = dr[2].ToString();
+                        plato.precioCH = dr[3].ToString();
+                        platillos.Add(plato);  //Para ir agregando a la lista.
+                    }
+                    dr.Close();
+                    conn.Close();
+                    cmd.Dispose();
+                    conn.Dispose();
+                    return platillos;
+                }
+                else
+                {
+                    dr.Close();
+                    conn.Close();
+                    conn.Dispose();
+                    cmd.Dispose();
+                    return new List<Cat_Platillos>();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return new List<Cat_Platillos>();
+            }
+
+        }
 
         #endregion
 

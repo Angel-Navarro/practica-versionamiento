@@ -99,7 +99,6 @@ namespace FoodTouch.Models
 
         }
 
-
         #endregion
 
         #region Insert
