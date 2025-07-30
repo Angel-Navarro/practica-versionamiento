@@ -30,7 +30,7 @@
                     <div class="comanda-header @(comanda.estado.ToLower())">
                         <div class="comanda-info">
                             <div class="comanda-number">
-                                <button class="toggle-btn">
+                                <button class="toggle-btn collapsed">
                                     <svg viewBox="0 0 24 24" fill="currentColor">
                                         <path d="M7 10l5 5 5-5z" />
                                     </svg>
@@ -93,7 +93,7 @@
                         </div>
                     </div>
 
-                    <div class="comanda-content">
+                    <div class="comanda-content collapsed">
                         <!--Lista de platillos-->
                         <div class="platillos-list">
                             @if (comanda.listaPlatillos != null && comanda.listaPlatillos.Any())

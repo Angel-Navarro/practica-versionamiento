@@ -78,7 +78,7 @@ function togglePlatilloStatus(platilloId, comandaId) {
     checkComandaCompletion(comandaId);
 
     // Aquí puedes agregar la llamada AJAX si es necesario
-    // updatePlatilloStatusOnServer(platilloId, newStatus);
+    updatePlatilloStatusOnServer(platilloId, newStatus);
 }
 
 //Actualiza el estado visual de un platillo
@@ -174,6 +174,9 @@ function checkComandaCompletion(comandaId) {
 
     // Actualizar barra de progreso
     updateProgressBar(comandaCardElement, platillos);
+
+    //Actualizar en server
+    updateComandaStatusOnServer(comandaId, comandaStatus);
 }
 
 /**
@@ -210,9 +213,58 @@ function updateComandaVisualStatus(comandaCard, newStatus) {
                 case 'completed':
                     btnIcon.className = 'fas fa-crown';
                     comandaStatusBtn.style.cursor = 'not-allowed';
+
+                    // NUEVA FUNCIONALIDAD: Hacer desaparecer la comanda después de completarla
+                    setTimeout(() => {
+                        fadeOutAndRemoveComanda(comandaCard);
+                    }, 1500); // Esperar 1.5 segundos antes de comenzar la desaparición
                     break;
             }
         }
+    }
+
+
+    // Nueva función para hacer desaparecer la comanda con animación
+    function fadeOutAndRemoveComanda(comandaCard) {
+        // Agregar clase para animación de desaparición
+        comandaCard.classList.add('comanda-completing');
+
+        // Después de la animación, ocultar completamente
+        setTimeout(() => {
+            comandaCard.classList.add('comanda-completed-hidden');
+
+            // Opcional: Remover completamente del DOM después de un tiempo
+            setTimeout(() => {
+                comandaCard.style.display = 'none';
+                // O si quieres removerlo completamente del DOM:
+                // comandaCard.remove();
+            }, 500);
+        }, 800); // Duración de la animación de fade out
+    }
+
+    // Función opcional para restaurar comandas ocultas (útil para debugging o funcionalidad de "mostrar completadas")
+    function showCompletedCommandas() {
+        const hiddenComandas = document.querySelectorAll('.comanda-completed-hidden');
+        hiddenComandas.forEach(comanda => {
+            comanda.style.display = 'block';
+            comanda.classList.remove('comanda-completed-hidden', 'comanda-completing');
+        });
+    }
+
+    // Función para ocultar/mostrar comandas completadas (toggle)
+    function toggleCompletedComandas() {
+        const completedComandas = document.querySelectorAll('.comanda-card .comanda-header.completed');
+        completedComandas.forEach(header => {
+            const comandaCard = header.closest('.comanda-card');
+            if (comandaCard.classList.contains('comanda-completed-hidden')) {
+                // Mostrar
+                comandaCard.style.display = 'block';
+                comandaCard.classList.remove('comanda-completed-hidden', 'comanda-completing');
+            } else {
+                // Ocultar
+                fadeOutAndRemoveComanda(comandaCard);
+            }
+        });
     }
 
     // Actualizar ícono de estado en el header
@@ -304,10 +356,14 @@ function toggleComandaStatus(comandaId) {
     updateComandaVisualStatus(comandaCardElement, newStatus);
 
     // Aquí puedes agregar la llamada AJAX si es necesario
-    // updateComandaStatusOnServer(comandaId, newStatus);
+    updateComandaStatusOnServer(comandaId, newStatus);
 }
 
-// Funciones para llamadas al servidor (opcional - implementar según necesites)
+
+
+
+
+// Funciones para llamadas al servidor
 function updatePlatilloStatusOnServer(platilloId, newStatus) {
     console.log('Actualizando platillo en servidor:', platilloId, newStatus);
     // Aquí agregarías tu llamada AJAX al controlador
@@ -327,6 +383,26 @@ function updatePlatilloStatusOnServer(platilloId, newStatus) {
         }
     });
     */
+
+
+
+    const formData = new FormData();
+    formData.append("idPlatillo", platilloId);
+    formData.append("estado", newStatus);
+
+    axios.post(urlServer + 'ComandasCocina/ActualizarEstatusComandaPlatillo', formData)
+        .then(respuesta => {
+            if (respuesta.data === 'OK') {
+                console.log('Platillo actualizado en servidor');
+            } else {
+                MostrarAlerta("Error al guardar.");
+            }
+        }).catch(error => {
+            console.error(error);
+            //    MostrarAlerta("Error en la solicitud.");
+        });
+
+
 }
 
 function updateComandaStatusOnServer(comandaId, newStatus) {
@@ -348,7 +424,29 @@ function updateComandaStatusOnServer(comandaId, newStatus) {
         }
     });
     */
+
+
+
+    const formData = new FormData();
+    formData.append("idComanda", comandaId);
+    formData.append("estado", newStatus);
+
+    axios.post(urlServer + 'ComandasCocina/ActualizarEstadoComanda', formData)
+        .then(respuesta => {
+            if (respuesta.data === 'OK') {
+                console.log('Comanda actualizada en servidor');
+            } else {
+                MostrarAlerta("Error al guardar.");
+            }
+        }).catch(error => {
+            console.error(error);
+        //    MostrarAlerta("Error en la solicitud.");
+        });
 }
+
+
+
+
 
 // Inicializar cuando el documento esté listo
 document.addEventListener('DOMContentLoaded', function () {

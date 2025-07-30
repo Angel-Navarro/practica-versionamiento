@@ -202,7 +202,7 @@ namespace FoodTouch.Models
             }
         }
 
-        public static string ActualizarEstatusComanda(int idComPlatillo, string estado)
+        public static string ActualizarEstatusComandaPlatillo(int ID, string estado)
         {
 
             SqlConnection conn = new SqlConnection(Globales.GlobalVariables.conexion_db);
@@ -212,6 +212,32 @@ namespace FoodTouch.Models
                 string query = string.Format(@"UPDATE TBL_COMANDAS_PLATILLOS
                 SET estado = '{1}'
                 WHERE ID = '{0}'",
+                ID, estado);
+
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.ExecuteNonQuery();
+                conn.Close();
+                conn.Dispose();
+                cmd.Dispose();
+                return "OK";
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return "ERROR ";
+            }
+        }
+        public static string ActualizarTodosEstatusComandaPlatillo(int idComPlatillo, string estado)
+        {
+
+            SqlConnection conn = new SqlConnection(Globales.GlobalVariables.conexion_db);
+            try
+            {
+
+                string query = string.Format(@"UPDATE TBL_COMANDAS_PLATILLOS
+                SET estado = '{1}'
+                WHERE idComanda = '{0}'",
                 idComPlatillo, estado);
 
                 conn.Open();

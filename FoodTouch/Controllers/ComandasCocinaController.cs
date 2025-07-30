@@ -14,13 +14,12 @@ namespace FoodTouch.Controllers
             string dia = DateTime.Now.ToString("yyyy-MM-dd");
 
             //Obtener todas las comandas
-            var listaComandas = Comandas.ObtenerComandas(dia);
+            var listaComandas = Comandas.ObtenerComandasCocina(dia);
 
             ViewBag.platillosPrecio = platillosPrecio;
             ViewBag.listaComandas = listaComandas;
 
             // Enviar a la vista
-            return View();
             return View();
         }
 
@@ -92,5 +91,30 @@ namespace FoodTouch.Controllers
                 return View();
             }
         }
+
+
+        #region Metodos
+        // POST: ComandasCocinaController/Delete/5
+        #region Obtener
+
+        [HttpPost]
+        public string ActualizarEstadoComanda(string idComanda, string estado)
+        {
+            int idCom = int.Parse(idComanda);
+
+            return Comandas.ActualizarEstatusComanda(idCom, estado);
+        }
+
+        [HttpPost]
+        public string ActualizarEstatusComandaPlatillo(string idPlatillo, string estado)
+        {
+            int id = int.Parse(idPlatillo);
+
+            return Comandas_Platillos.ActualizarEstatusComandaPlatillo(id, estado);
+        }
+
+        #endregion
+        #endregion
+
     }
 }
