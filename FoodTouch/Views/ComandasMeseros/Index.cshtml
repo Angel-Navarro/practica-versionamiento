@@ -29,7 +29,7 @@
 
 
     <div class="container">
-        <!-- Aquí habrá un ForEach para las comandas existentes -->
+        <!--ForEach para las comandas existentes -->
         @if (comandas != null && comandas.Any())
         {
             @foreach (var comanda in comandas)
@@ -38,7 +38,7 @@
                     <div class="comanda-header @(comanda.estado.ToLower())">
                         <div class="comanda-info">
                             <div class="comanda-number">
-                                <button class="toggle-btn" onclick="toggleComanda(this)">
+                                <button class="toggle-btn collapsed" onclick="toggleComanda(this)">
                                     <svg viewBox="0 0 24 24" fill="currentColor">
                                         <path d="M7 10l5 5 5-5z" />
                                     </svg>
@@ -80,7 +80,7 @@
                         </div>
                     </div>
 
-                    <div class="comanda-content">
+                    <div class="comanda-content collapsed">
                         <div class="comanda-actions">
 @*                             <button class="action-btn danger" onclick="cancelarComanda(@comanda.ID)">Cancelar</button>
                             <button class="action-btn primary" onclick="iniciarComanda(@comanda.ID)">Iniciar</button> *@

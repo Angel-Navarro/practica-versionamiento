@@ -9,9 +9,8 @@ let contadorComandas = 1; // Contador para asignar números a nuevas comandas
 let platillosTemporales = []; // Array temporal para los platillos de la nueva comanda
 let totalComandaTemporal = 0; // Total temporal de la nueva comanda
 
-// =====================================================
-// FUNCIONES PARA DESPLEGUE DE COMANDAS
-// =====================================================
+
+// FUNCIONES PARA DESPLEGUE DE COMANDAS ---------------------------------------------------------------
 
 /**
  * Alterna el estado de una comanda (expandida/colapsada)
@@ -30,13 +29,11 @@ function toggleComanda(button) {
     }
 }
 
-// =====================================================
-// FUNCIONES PARA MANEJO DE NUEVA COMANDA
-// =====================================================
 
-/**
- * Muestra la comanda de agregar (la hace visible)
- */
+// FUNCIONES PARA MANEJO DE NUEVA COMANDA --------------------------------------------------------------------
+
+
+ //Muestra la comanda de agregar (la hace visible)
 function mostrarComandaAgregar() {
     const comandaAgregar = document.getElementById('comandaAgregar');
     if (comandaAgregar) {
@@ -52,9 +49,7 @@ function mostrarComandaAgregar() {
     }
 }
 
-/**
- * Oculta la comanda de agregar
- */
+ //Oculta la comanda de agregar
 function ocultarComandaAgregar() {
     const comandaAgregar = document.getElementById('comandaAgregar');
     if (comandaAgregar) {
@@ -70,9 +65,7 @@ function ocultarComandaAgregar() {
     limpiarComandaTemporal();
 }
 
-/**
- * Limpia todos los datos temporales de la nueva comanda
- */
+ //Limpia todos los datos temporales de la nueva comanda
 function limpiarComandaTemporal() {
     platillosTemporales = [];
     totalComandaTemporal = 0;
@@ -80,13 +73,9 @@ function limpiarComandaTemporal() {
     actualizarTotalTemporal();
 }
 
-// =====================================================
-// FUNCIONES PARA MANEJO DEL MODAL DE PLATILLOS
-// =====================================================
+// FUNCIONES PARA MANEJO DEL MODAL DE PLATILLOS  ------------------------------------------------
 
-/**
- * Inicializa los eventos del modal de agregar platillo
- */
+ //Inicializa los eventos del modal de agregar platillo
 function inicializarModalPlatillo() {
     const inputPlatillo = document.getElementById('cmb_PlatilloMod_ComMes');
     const inputCantidad = document.getElementById('txt_CantidadMod_ComMes');
@@ -129,9 +118,7 @@ function inicializarModalPlatillo() {
     }
 }
 
-/**
- * Calcula el total del platillo basado en cantidad y precio unitario
- */
+//Calcula el total del platillo basado en cantidad y precio unitario
 function calcularTotalPlatillo() {
     const precioUnitario = parseFloat(document.getElementById('txt_PrecioUniMod_ComMes').value) || 0;
     const cantidad = parseInt(document.getElementById('txt_CantidadMod_ComMes').value) || 1;
@@ -140,13 +127,7 @@ function calcularTotalPlatillo() {
     document.getElementById('txt_PrecioTotMod_ComMes').value = total.toFixed(2);
 }
 
-
-
-
-/**Todo este apartado es para obetner el precio de la BDD y reuyilizar esta funcion 
- * -------------------------------------------------------------------------------------
- */
-
+//Obetner el precio de la BDD para reutilizar esta funcion
 function obtenerPrecioPlatillo(platilloId, tamano) {
     // Convertir a string para asegurar la comparación de claves
     const id = platilloId.toString();
@@ -160,14 +141,7 @@ function obtenerPrecioPlatillo(platilloId, tamano) {
     return 100;
 }
 
-
-
-
-//-------------------------------------------------------
-
-/**
- * Limpia todos los campos del modal
- */
+ //Limpia todos los campos del modal
 function limpiarModalPlatillo() {
     document.getElementById('cmb_PlatilloMod_ComMes').value = '';
     document.getElementById('txt_IdPlatilloMod_ComMes').value = '';
@@ -178,13 +152,9 @@ function limpiarModalPlatillo() {
     document.getElementById('txt_NotasMod_ComMes').value = '';
 }
 
-// =====================================================
-// FUNCIONES PARA AGREGAR PLATILLOS
-// =====================================================
+// FUNCIONES PARA AGREGAR PLATILLOS---------------------------------------------------------------
 
-/**
- * Agrega un platillo a la lista temporal de la nueva comanda
- */
+ //Agrega un platillo a la lista temporal de la nueva comanda
 function agregarPlatilloTemporal() {
     // Obtener datos del modal
     const platilloNombre = document.getElementById('cmb_PlatilloMod_ComMes').value;
@@ -241,9 +211,7 @@ function agregarPlatilloTemporal() {
     console.log('Platillo agregado temporalmente:', platillo);
 }
 
-/**
- * Actualiza la lista visual de platillos temporales
- */
+ //Actualiza la lista visual de platillos temporales
 function actualizarListaPlatillosTemporales() {
     const listaContainer = document.querySelector('#comandaAgregar .platillos-list');
     if (!listaContainer) return;
@@ -342,9 +310,7 @@ function modificarPlatilloTemporal(tempId) {
     modal.show();
 }
 
-/**
- * Actualiza el total de la comanda temporal
- */
+ //Actualiza el total de la comanda temporal
 function actualizarTotalTemporal() {
     const totalElement = document.querySelector('#comandaAgregar .total-section');
     if (totalElement) {
@@ -352,16 +318,9 @@ function actualizarTotalTemporal() {
     }
 }
 
-// =====================================================
-// FUNCIONES PARA GUARDAR COMANDA
-// =====================================================
+// FUNCIONES PARA GUARDAR COMANDA----------------------------------------------------------------------
 
-/**
- * Guarda la nueva comanda (aquí harías la llamada AJAX al servidor)
- */
-/**
- * Guarda la nueva comanda enviando todos los datos al servidor
- */
+ //Guarda la nueva comanda enviando todos los datos al servidor
 function guardarNuevaComanda() {
     if (platillosTemporales.length === 0) {
         alert('Debe agregar al menos un platillo a la comanda');
@@ -513,13 +472,9 @@ function guardarNuevaComandaJSON() {
         });
 }
 
-// =====================================================
-// FUNCIONES DE INICIALIZACIÓN
-// =====================================================
+// FUNCIONES DE INICIALIZACIÓN----------------------------------------------------------
 
-/**
- * Inicializa todos los eventos cuando el DOM está listo
- */
+ //Inicializa todos los eventos cuando el DOM está listo
 document.addEventListener('DOMContentLoaded', function () {
     // Ocultar la comanda de agregar al cargar la página
     const comandaAgregar = document.getElementById('comandaAgregar');
@@ -555,12 +510,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Inicializar algunas tarjetas colapsadas
-    const toggleButtons = document.querySelectorAll('.toggle-btn');
-    if (toggleButtons.length > 1) {
-        toggleComanda(toggleButtons[1]); // Colapsar la segunda tarjeta
-    }
-
     // Event listener para cuando se cierra el modal
     const modal = document.getElementById('ModalAgregarPlatillo_ComMes');
     if (modal) {
@@ -573,14 +522,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
-// =====================================================
-// FUNCIÓN PRINCIPAL PARA EL BOTÓN DE GUARDAR DEL MODAL
-// =====================================================
+// FUNCIÓN PRINCIPAL PARA EL BOTÓN DE GUARDAR DEL MODAL---------------
 
-/**
- * Función principal que se llama desde el botón "Guardar" del modal
- * Determina si está agregando o modificando un platillo
- */
+ //Función principal que se llama desde el botón "Guardar" del modal
 function AgregarPlatilloAModal() {
     const modal = document.getElementById('ModalAgregarPlatillo_ComMes');
     const editingId = modal.getAttribute('data-editing');
@@ -655,29 +599,14 @@ function modificarPlatilloExistente(tempId) {
 }
 
 
-//Obtener comandas por input de fecha ----------
 
-//function ActualizarComandasPorFecha() {
-//    const fecha = document.getElementById("txt_FechaComandas_ComMes").value.trim();
 
-//    const formData = new FormData();
-//    formData.append("fecha", fecha);
 
-//    axios.get(urlServer + 'ComandasMeseros/ObtenerComandasDependeDia', formData)
-//        .then(respuesta => {
-//            if (respuesta.data === 'OK') {
 
-//                //Mostrar Comandas actualizadas
 
-//            } else {
-//                alert('Error al obtener');
-//            }
-//        }).catch(error => {
-//            console.error(error);
-//            alert('Error en la solicitud');
-//        });
-//}
-
+// ========================================================================================================
+//Obtener comandas por input de fecha
+// ========================================================================================================
 
 
 
@@ -685,14 +614,71 @@ function modificarPlatilloExistente(tempId) {
 // FUNCIÓN PARA ACTUALIZAR COMANDAS POR FECHA
 // =====================================================
 
+///**
+// * Actualiza las comandas mostradas según la fecha seleccionada
+// */
+//function ActualizarComandasPorFecha() {
+//    const fecha = document.getElementById("txt_FechaComandas_ComMes").value.trim();
+
+//    if (!fecha) {
+//        alert('Por favor seleccione una fecha válida');
+//        return;
+//    }
+
+//    // Mostrar indicador de carga
+//    mostrarIndicadorCarga();
+
+//    // IMPORTANTE: Usar GET con parámetros en la URL, no FormData
+//    const url = `${urlServer}ComandasMeseros/ObtenerComandasDependeDia?fecha=${encodeURIComponent(fecha)}`;
+
+//    axios.get(url)
+//        .then(respuesta => {
+//            console.log('Respuesta del servidor:', respuesta.data);
+
+//            // La respuesta debería ser un array de comandas, no 'OK'
+//            if (Array.isArray(respuesta.data)) {
+//                // Actualizar las comandas en el DOM
+//                actualizarComandasEnDOM(respuesta.data);
+//                console.log(`Se cargaron ${respuesta.data.length} comandas para la fecha ${fecha}`);
+//            } else {
+//                // Si no es un array, verificar si hay un mensaje de error
+//                console.warn('Respuesta inesperada:', respuesta.data);
+//                alert('No se encontraron comandas para la fecha seleccionada');
+//                limpiarComandasDOM();
+//            }
+//        })
+//        .catch(error => {
+//            console.error('Error al obtener comandas:', error);
+//            alert('Error al cargar las comandas. Por favor intente nuevamente.');
+//            limpiarComandasDOM();
+//        })
+//        .finally(() => {
+//            // Ocultar indicador de carga
+//            ocultarIndicadorCarga();
+//        });
+//}
+
+
+
+
+
+
+
+
+
+// =====================================================
+// FUNCIONES PARA ACTUALIZAR DOM DE COMANDAS
+// =====================================================
+
 /**
  * Actualiza las comandas mostradas según la fecha seleccionada
+ * VERSIÓN MEJORADA de tu función existente
  */
 function ActualizarComandasPorFecha() {
     const fecha = document.getElementById("txt_FechaComandas_ComMes").value.trim();
 
     if (!fecha) {
-        alert('Por favor seleccione une fecha válida');
+        alert('Por favor seleccione una fecha válida');
         return;
     }
 
@@ -706,22 +692,26 @@ function ActualizarComandasPorFecha() {
         .then(respuesta => {
             console.log('Respuesta del servidor:', respuesta.data);
 
-            // La respuesta debería ser un array de comandas, no 'OK'
+            // La respuesta debería ser un array de comandas
             if (Array.isArray(respuesta.data)) {
                 // Actualizar las comandas en el DOM
                 actualizarComandasEnDOM(respuesta.data);
                 console.log(`Se cargaron ${respuesta.data.length} comandas para la fecha ${fecha}`);
+            } else if (respuesta.data === 'Sin comandas' || respuesta.data === 'No hay comandas') {
+                // Mensaje específico cuando no hay comandas
+                actualizarComandasEnDOM([]);
+                console.log('No hay comandas para la fecha seleccionada');
             } else {
                 // Si no es un array, verificar si hay un mensaje de error
                 console.warn('Respuesta inesperada:', respuesta.data);
-                alert('No se encontraron comandas para la fecha seleccionada');
-                limpiarComandasDOM();
+                actualizarComandasEnDOM([]);
             }
         })
         .catch(error => {
             console.error('Error al obtener comandas:', error);
             alert('Error al cargar las comandas. Por favor intente nuevamente.');
             limpiarComandasDOM();
+            mostrarMensajeNoComandasEncontradas();
         })
         .finally(() => {
             // Ocultar indicador de carga
@@ -729,51 +719,93 @@ function ActualizarComandasPorFecha() {
         });
 }
 
+// =====================================================
+// FUNCIONES PARA ACTUALIZAR DOM DE COMANDAS
+// =====================================================
+
 /**
- * Actualiza el DOM con las nuevas comandas
+ * Actualiza las comandas en el DOM con nuevos datos
  * @param {Array} comandas - Array de comandas del servidor
  */
 function actualizarComandasEnDOM(comandas) {
-    const container = document.querySelector('.container');
-    if (!container) {
-        console.error('No se encontró el contenedor de comandas');
+    // Limpiar comandas actuales
+    limpiarComandasDOM();
+
+    // Si no hay comandas, mostrar mensaje
+    if (!comandas || comandas.length === 0) {
+        mostrarMensajeNoComandasEncontradas();
         return;
     }
 
-    // Buscar el contenedor específico donde se muestran las comandas
-    // Asumiendo que hay un div específico para las comandas
-    let comandasContainer = container.querySelector('.comandas-container');
-
-    // Si no existe, buscar después del contenedor de agregar comanda
-    if (!comandasContainer) {
-        const comandaAgregar = document.getElementById('comandaAgregar');
-        if (comandaAgregar && comandaAgregar.nextElementSibling) {
-            comandasContainer = container;
-        } else {
-            comandasContainer = container;
-        }
-    }
-
-    // Limpiar comandas existentes (mantener el botón de agregar y otros elementos)
-    limpiarComandasExistentes();
-
-    if (comandas.length === 0) {
-        // Mostrar mensaje de no hay comandas
-        const noComandas = document.createElement('div');
-        noComandas.className = 'no-comandas';
-        noComandas.innerHTML = '<p>No hay comandas para la fecha seleccionada.</p>';
-        container.appendChild(noComandas);
-        return;
-    }
-
-    // Crear y agregar cada comanda
+    // Crear y agregar cada comanda al DOM
+    const container = obtenerContainerComandas();
     comandas.forEach(comanda => {
         const comandaElement = crearElementoComanda(comanda);
         container.appendChild(comandaElement);
     });
 
-    // Reinicializar eventos para las nuevas comandas
-    reinicializarEventosComandas();
+    console.log(`Se agregaron ${comandas.length} comandas al DOM`);
+}
+
+/**
+ * Limpia todas las comandas existentes del DOM (excepto la de agregar)
+ */
+function limpiarComandasDOM() {
+    const container = obtenerContainerComandas();
+
+    // Obtener todas las comandas existentes (excepto la de agregar y el botón)
+    const comandasExistentes = container.querySelectorAll('.comanda-card:not(#comandaAgregar)');
+
+    comandasExistentes.forEach(comanda => {
+        // Animar salida antes de eliminar
+        comanda.style.transition = 'all 0.3s ease';
+        comanda.style.opacity = '0';
+        comanda.style.transform = 'translateX(-20px)';
+
+        setTimeout(() => {
+            if (comanda.parentNode) {
+                comanda.parentNode.removeChild(comanda);
+            }
+        }, 300);
+    });
+
+    // También limpiar mensaje de "no comandas" si existe
+    const mensajeNoComandas = container.querySelector('.no-comandas');
+    if (mensajeNoComandas) {
+        mensajeNoComandas.remove();
+    }
+}
+
+/**
+ * Obtiene el contenedor principal de comandas
+ * @returns {HTMLElement} Contenedor de comandas
+ */
+function obtenerContainerComandas() {
+    const container = document.querySelector('.container');
+    if (!container) {
+        console.error('No se encontró el contenedor de comandas');
+        return document.body; // Fallback
+    }
+    return container;
+}
+
+/**
+ * Muestra mensaje cuando no se encuentran comandas
+ */
+function mostrarMensajeNoComandasEncontradas() {
+    const container = obtenerContainerComandas();
+
+    const mensajeDiv = document.createElement('div');
+    mensajeDiv.className = 'no-comandas';
+    mensajeDiv.innerHTML = '<p>No hay comandas para la fecha seleccionada.</p>';
+
+    // Insertar antes del botón de agregar comanda
+    const botonAgregar = container.querySelector('.text-center');
+    if (botonAgregar) {
+        container.insertBefore(mensajeDiv, botonAgregar);
+    } else {
+        container.appendChild(mensajeDiv);
+    }
 }
 
 /**
@@ -782,15 +814,21 @@ function actualizarComandasEnDOM(comandas) {
  * @returns {HTMLElement} Elemento DOM de la comanda
  */
 function crearElementoComanda(comanda) {
-    const div = document.createElement('div');
-    div.className = 'comanda-card';
+    const comandaDiv = document.createElement('div');
+    comandaDiv.className = 'comanda-card';
 
-    // Crear HTML de la comanda
-    div.innerHTML = `
-        <div class="comanda-header ${comanda.estado.toLowerCase()}">
+    // Formatear fecha/hora
+    const fechaHoraFormateada = formatearFechaHora(comanda.fechaHora);
+
+    // Calcular total de platillos
+    const totalComanda = comanda.listaPlatillos ?
+        comanda.listaPlatillos.reduce((sum, p) => sum + (p.precioTotal || 0), 0) : 0;
+
+    comandaDiv.innerHTML = `
+        <div class="comanda-header ${(comanda.estado || 'pending').toLowerCase()}">
             <div class="comanda-info">
                 <div class="comanda-number">
-                    <button class="toggle-btn" onclick="toggleComanda(this)">
+                    <button class="toggle-btn collapsed" onclick="toggleComanda(this)">
                         <svg viewBox="0 0 24 24" fill="currentColor">
                             <path d="M7 10l5 5 5-5z" />
                         </svg>
@@ -801,38 +839,76 @@ function crearElementoComanda(comanda) {
                     Comanda #${comanda.ID.toString().padStart(3, '0')}
                     <input hidden id="txt_PlatId_ComMes_${comanda.ID}" value="${comanda.ID}" />
                 </div>
-                <div class="comanda-time">
-                    ${formatearHora(comanda.fechaHora)}
-                </div>
+                <div class="comanda-time">${fechaHoraFormateada}</div>
             </div>
             <div class="comanda-details">
-                <div>Mesa ${comanda.mesa}</div>
-                <div>${comanda.usuarioNombre}</div>
+                <div>Mesa ${comanda.mesa || 'N/A'}</div>
+                <div>${comanda.usuarioNombre || 'Usuario'}</div>
             </div>
         </div>
-        <div class="comanda-content">
+
+        <div class="comanda-content collapsed">
             <div class="comanda-actions">
-                <!-- Botones de acción si los necesitas -->
+                <!-- Aquí puedes agregar botones de acción si los necesitas -->
             </div>
+
             <div class="platillos-list">
-                ${crearListaPlatillos(comanda.listaPlatillos)}
+                ${crearListaPlatillosHTML(comanda.listaPlatillos)}
             </div>
+
             <div class="total-section">
-                Total: $${calcularTotalComanda(comanda.listaPlatillos)}
+                Total: $${totalComanda.toFixed(2)}
             </div>
         </div>
     `;
 
-    return div;
+    return comandaDiv;
 }
 
 /**
- * Obtiene el icono según el estado de la comanda
+ * Crea el HTML para la lista de platillos
+ * @param {Array} platillos - Array de platillos
+ * @returns {string} HTML de los platillos
+ */
+function crearListaPlatillosHTML(platillos) {
+    if (!platillos || platillos.length === 0) {
+        return '<div class="platillo-item"><div class="platillo-notes">No hay platillos en esta comanda</div></div>';
+    }
+
+    return platillos.map(platillo => `
+        <div class="platillo-item">
+            <div class="status-badge ${(platillo.estado || 'pending').toLowerCase()}">
+                ${obtenerTextoEstadoPlatillo(platillo.estado)}
+            </div>
+            <div class="platillo-header">
+                <div class="platillo-info">
+                    <div class="platillo-name">${platillo.nombrePlatillo || platillo.nombre || 'Platillo'}</div>
+                    <div class="platillo-size ${(platillo.tamano || 'medio').toLowerCase()}">${platillo.tamano || 'MEDIO'}</div>
+                </div>
+                <div class="platillo-quantity">${platillo.cantidad || 1}</div>
+            </div>
+            ${platillo.notas ? `<div class="platillo-notes">${platillo.notas}</div>` : ''}
+            <div class="container-fluid platillo-notes">
+                <label>Precio Unitario $: </label>
+                <label>${((platillo.precioTotal || 0) / (platillo.cantidad || 1)).toFixed(2)}</label>&nbsp;
+                <label>Precio Total $: </label>
+                <label>${(platillo.precioTotal || 0).toFixed(2)}</label>
+            </div>
+            <div class="platillo-actions">
+                <!-- Aquí puedes agregar botones de acción para platillos si los necesitas -->
+            </div>
+        </div>
+    `).join('');
+}
+
+/**
+ * Obtiene el ícono correspondiente al estado de la comanda
  * @param {string} estado - Estado de la comanda
- * @returns {string} HTML del icono
+ * @returns {string} HTML del ícono
  */
 function obtenerIconoEstado(estado) {
-    const estadoLower = estado.toLowerCase();
+    const estadoLower = (estado || 'pending').toLowerCase();
+
     switch (estadoLower) {
         case 'pending':
             return '<i class="fa-solid fa-circle-check fa-lg" style="color: #d80e0e;"></i>';
@@ -841,70 +917,18 @@ function obtenerIconoEstado(estado) {
         case 'in-progress':
             return '<i class="fa-solid fa-clock fa-lg" style="color: #ffc107;"></i>';
         default:
-            return '<i class="fa-solid fa-circle-check fa-lg" style="color: #6c757d;"></i>';
+            return '<i class="fa-solid fa-circle-check fa-lg" style="color: #d80e0e;"></i>';
     }
 }
 
 /**
- * Formatea la hora de la comanda
- * @param {string} fechaHora - Fecha y hora en string
- * @returns {string} Hora formateada
- */
-function formatearHora(fechaHora) {
-    try {
-        const fecha = new Date(fechaHora);
-        return fecha.toLocaleTimeString('es-ES', {
-            hour: '2-digit',
-            minute: '2-digit'
-        });
-    } catch (error) {
-        return fechaHora;
-    }
-}
-
-/**
- * Crea la lista HTML de platillos
- * @param {Array} platillos - Array de platillos
- * @returns {string} HTML de la lista de platillos
- */
-function crearListaPlatillos(platillos) {
-    if (!platillos || platillos.length === 0) {
-        return '<div class="platillo-item"><div class="platillo-notes">No hay platillos en esta comanda</div></div>';
-    }
-
-    return platillos.map(platillo => `
-        <div class="platillo-item">
-            <div class="status-badge ${platillo.estado.toLowerCase()}">
-                ${obtenerSimbololEstadoPlatillo(platillo.estado)}
-            </div>
-            <div class="platillo-header">
-                <div class="platillo-info">
-                    <div class="platillo-name">${platillo.nombrePlatillo}</div>
-                    <div class="platillo-size ${platillo.tamano.toLowerCase()}">${platillo.tamano}</div>
-                </div>
-                <div class="platillo-quantity">${platillo.cantidad}</div>
-            </div>
-            ${platillo.notas ? `<div class="platillo-notes">${platillo.notas}</div>` : ''}
-            <div class="container-fluid platillo-notes">
-                <label>Precio Unitario $: </label>
-                <label>${(platillo.precioTotal / platillo.cantidad).toFixed(2)}</label>&nbsp;
-                <label>Precio Total $: </label>
-                <label>${platillo.precioTotal.toFixed(2)}</label>
-            </div>
-            <div class="platillo-actions">
-                <!-- Botones de acción para platillos si los necesitas -->
-            </div>
-        </div>
-    `).join('');
-}
-
-/**
- * Obtiene el símbolo según el estado del platillo
+ * Obtiene el texto correspondiente al estado del platillo
  * @param {string} estado - Estado del platillo
- * @returns {string} Símbolo del estado
+ * @returns {string} Texto del estado
  */
-function obtenerSimbololEstadoPlatillo(estado) {
-    const estadoLower = estado.toLowerCase();
+function obtenerTextoEstadoPlatillo(estado) {
+    const estadoLower = (estado || 'pending').toLowerCase();
+
     switch (estadoLower) {
         case 'pending':
             return '!';
@@ -913,144 +937,80 @@ function obtenerSimbololEstadoPlatillo(estado) {
         case 'in-progress':
             return '⏱';
         default:
-            return '?';
+            return '!';
     }
 }
 
 /**
- * Calcula el total de una comanda
- * @param {Array} platillos - Array de platillos
- * @returns {string} Total formateado
+ * Formatea la fecha y hora para mostrar
+ * @param {string} fechaHora - Fecha/hora del servidor
+ * @returns {string} Hora formateada (HH:MM)
  */
-function calcularTotalComanda(platillos) {
-    if (!platillos || platillos.length === 0) return '0.00';
+function formatearFechaHora(fechaHora) {
+    if (!fechaHora) return '--:--';
 
-    const total = platillos.reduce((sum, platillo) => {
-        return sum + (parseFloat(platillo.precioTotal) || 0);
-    }, 0);
-
-    return total.toFixed(2);
-}
-
-/**
- * Limpia las comandas existentes del DOM
- */
-function limpiarComandasExistentes() {
-    const container = document.querySelector('.container');
-    if (!container) return;
-
-    // Remover todas las comandas existentes pero mantener otros elementos
-    const comandasCards = container.querySelectorAll('.comanda-card');
-    comandasCards.forEach(card => card.remove());
-
-    // Remover mensaje de no comandas si existe
-    const noComandas = container.querySelector('.no-comandas');
-    //if (noComandas) noComandas.remove();
-}
-
-/**
- * Limpia completamente el contenedor de comandas
- */
-function limpiarComandasDOM() {
-    limpiarComandasExistentes();
-
-    const container = document.querySelector('.container');
-    if (!container) return;
-
-    const noComandas = document.createElement('div');
-    noComandas.className = 'no-comandas';
-    noComandas.innerHTML = '<p>No hay comandas para mostrar.</p>';
-    container.appendChild(noComandas);
-}
-
-/**
- * Reinicializa los eventos para las nuevas comandas
- */
-function reinicializarEventosComandas() {
-    // Reinicializar eventos de botones toggle si es necesario
-    const toggleButtons = document.querySelectorAll('.toggle-btn');
-    toggleButtons.forEach(button => {
-        // Los eventos onclick ya están definidos en el HTML generado
-        // Si necesitas eventos adicionales, agrégalos aquí
-    });
-
-    // Reinicializar otros eventos específicos si los hay
-    console.log('Eventos de comandas reinicializados');
+    try {
+        const fecha = new Date(fechaHora);
+        if (isNaN(fecha.getTime())) {
+            // Si no se puede parsear como Date, intentar extraer solo la hora
+            const horaMatch = fechaHora.match(/(\d{1,2}):(\d{2})/);
+            return horaMatch ? `${horaMatch[1].padStart(2, '0')}:${horaMatch[2]}` : fechaHora;
+        }
+        return fecha.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+    } catch (error) {
+        console.warn('Error al formatear fecha/hora:', fechaHora, error);
+        return fechaHora;
+    }
 }
 
 /**
  * Muestra un indicador de carga
  */
 function mostrarIndicadorCarga() {
-    // Crear o mostrar un indicador de carga
-    let loader = document.getElementById('comandas-loader');
-    if (!loader) {
-        loader = document.createElement('div');
-        loader.id = 'comandas-loader';
-        loader.className = 'text-center p-4';
-        loader.innerHTML = '<div class="spinner-border" role="status"><span class="visually-hidden">Cargando...</span></div>';
+    // Crear overlay de carga si no existe
+    let loadingOverlay = document.getElementById('loadingOverlay');
+    if (!loadingOverlay) {
+        loadingOverlay = document.createElement('div');
+        loadingOverlay.id = 'loadingOverlay';
+        loadingOverlay.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        `;
+        loadingOverlay.innerHTML = `
+            <div style="background: white; padding: 20px; border-radius: 8px; text-align: center;">
+                <div style="margin-bottom: 10px;">Cargando comandas...</div>
+                <div style="border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 0 auto;"></div>
+            </div>
+        `;
+        document.body.appendChild(loadingOverlay);
 
-        const container = document.querySelector('.container');
-        if (container) {
-            //container.appendChild(loader);
-        }
-    } else {
-        loader.style.display = 'block';
+        // Agregar animación de spin
+        const style = document.createElement('style');
+        style.textContent = '@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }';
+        document.head.appendChild(style);
     }
+
+    loadingOverlay.style.display = 'flex';
 }
 
 /**
  * Oculta el indicador de carga
  */
 function ocultarIndicadorCarga() {
-    const loader = document.getElementById('comandas-loader');
-    if (loader) {
-        loader.remove();
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    if (loadingOverlay) {
+        loadingOverlay.style.display = 'none';
     }
 }
 
-// =====================================================
-// FUNCIÓN ALTERNATIVA USANDO FETCH EN LUGAR DE AXIOS
-// =====================================================
 
-/**
- * Versión alternativa usando fetch nativo
- */
-function ActualizarComandasPorFechaConFetch() {
-    const fecha = document.getElementById("txt_FechaComandas_ComMes").value.trim();
 
-    if (!fecha) {
-        alert('Por favor seleccione una fecha válida');
-        return;
-    }
 
-    mostrarIndicadorCarga();
-
-    const url = `${urlServer}ComandasMeseros/ObtenerComandasDependeDia?fecha=${encodeURIComponent(fecha)}`;
-
-    fetch(url)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(comandas => {
-            if (Array.isArray(comandas)) {
-                actualizarComandasEnDOM(comandas);
-                console.log(`Se cargaron ${comandas.length} comandas para la fecha ${fecha}`);
-            } else {
-                console.warn('Respuesta inesperada:', comandas);
-                alert('No se encontraron comandas para la fecha seleccionada');
-                limpiarComandasDOM();
-            }
-        })
-        .catch(error => {
-            console.error('Error al obtener comandas:', error);
-            alert('Error al cargar las comandas. Por favor intente nuevamente.');
-            limpiarComandasDOM();
-        })
-        .finally(() => {
-            ocultarIndicadorCarga();
-        });
-}
